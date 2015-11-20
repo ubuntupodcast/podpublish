@@ -1,8 +1,6 @@
 ## TODO
 
-  * Switch to Python 3.4 or 3.5 when python-video-coder installs.
-  * Encode video for YouTube
-  * Publish to YouTube
+  * Publish to YouTube - work in progress with Martin
   * Publish to Wordpress
   * Publish to Discourse?
   * Publish to Reddit

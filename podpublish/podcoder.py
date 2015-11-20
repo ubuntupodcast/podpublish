@@ -26,12 +26,15 @@ class Configuration(object):
         # artwork
         self.coverart = self.config['artwork']['coverart']
         self.backdrop = self.config['artwork']['backdrop']
-        self.poster = self.config['artwork']['poster']
         self.font = self.config['artwork']['font']
         self.font_size = int(self.config['artwork']['font_size'])
         self.font_color = self.config['artwork']['font_color']
         self.line_color = self.config['artwork']['line_color']
         self.fill_color = self.config['artwork']['fill_color']
+        self.fill_y_start = int(self.config['artwork']['fill_y_start'])
+        self.fill_y_stop = int(self.config['artwork']['fill_y_stop'])
+        self.img_header_width = int(self.config['artwork']['header_width'])
+        self.img_header_height = int(self.config['artwork']['header_height'])
 
         # episode
         self.audio_in = self.config['episode']['audio_in']
@@ -60,7 +63,8 @@ class Configuration(object):
         self.mkv_file = self.file_out + '.mkv'
         self.mp3_file = self.file_out + '.mp3'
         self.ogg_file = self.file_out + '.ogg'
-        self.png_file = self.file_out + '.png'
+        self.png_header_file = self.file_out + '_header.png'
+        self.png_poster_file = self.file_out + '_poster.png'
 
 def mp3_encode(config):
     print("Encoding " + config.mp3_file)
@@ -79,22 +83,20 @@ def mp3_tag(config):
         audio = EasyID3()
         audio.save(config.mp3_file)
 
-    tags = config.get_tags()
-
     # Add the tags.
-    for k in tags.keys():
+    for k in config.tags.keys():
         if k == 'comments':
             continue
         else:
             try:
-                audio[k] = tags[k]
+                audio[k] = config.tags[k]
             except EasyID3KeyError:
                 print("%s is an invalid ID3 key" % k)
     audio.save(config.mp3_file)
 
     # Comments are not supported via EasyID3
     audio = ID3(config.mp3_file)
-    audio["COMM"] = COMM(encoding=3, lang=config['tags']['language'], desc='desc', text=tags['comments'])
+    audio["COMM"] = COMM(encoding=3, lang=config.tags['language'], desc='desc', text=config.tags['comments'])
     audio.save(config.mp3_file)
 
 def mp3_coverart(config):
@@ -116,17 +118,17 @@ def ogg_encode(config):
     AudioSegment.from_file(config.audio_in).export(config.ogg_file,
         bitrate=config.ogg_bitrate,
         format='ogg',
+        codec='libvorbis',
         parameters=['-ac', config.ogg_channels]
         )
 
 def ogg_tag(config):
     print("Tagging " + config.ogg_file)
     audio = OggVorbis(config.ogg_file)
-    tags = config.get_tags()
 
     # Add the tags.
-    for k in tags.keys():
-        audio[k] = tags[k]
+    for k in config.tags.keys():
+        audio[k] = config.tags[k]
     audio.save()
 
 def ogg_coverart(config):
@@ -149,21 +151,13 @@ def ogg_coverart(config):
     dt=p.write();
     enc=base64.b64encode(dt).decode('ascii');
 
-    audio = OggVorbis(ogg_in)
+    audio = OggVorbis(config.ogg_file)
     audio['metadata_block_picture']=[enc];
     audio.save()
 
-def png_poster(config):
-    artist = config.tags['artist']
-    title = config.tags['title']
-    font = ImageFont.truetype(config.font, config.font_size)
-
-    # FIXME: Don't perform all the transforms here.
-    width = 960
-    height = 600
-
+def img_resize(img_file, width, height):
     #response = requests.get(headerimageurl)
-    img = Image.open(config.backdrop)
+    img = Image.open(img_file)
 
     # Check the image size.
     if img.size[0] < width or img.size[1] < height:
@@ -183,40 +177,56 @@ def png_poster(config):
         crop = (0, y_border // 2, width, height + (y_border // 2))
     img.thumbnail(resize_to, Image.ANTIALIAS)
     cropped = img.crop(crop)
+    return cropped
 
-    cropped.thumbnail((854, 534), Image.ANTIALIAS)
-    poster = cropped.crop((0,(534-480)//2,854,534-((534-480)//2)))
+def png_header(config):
+    print("Creating " + config.png_header_file)
+    header = img_resize(config.backdrop, config.img_header_width, config.img_header_height)
+    header.save(config.png_header_file)
+
+def png_poster(config):
+    # Poster images for use in YouTube videos are hardcoded to 854x480.
+    # No pressing need for higher resolution images for still videos.
+    print("Creating " + config.png_poster_file)
+    artist = config.tags['artist']
+    title = config.tags['album'] + ' ' + config.tags['title']
+    font = ImageFont.truetype(config.font, config.font_size)
+
+    image = img_resize(config.backdrop, config.img_header_width, config.img_header_height)
+    image.thumbnail((854, 534), Image.ANTIALIAS)
+    poster = image.crop((0,(534-480)//2,854,534-((534-480)//2)))
 
     draw = ImageDraw.Draw(poster)
-    draw.rectangle(((0,350),(854,480)), fill=config.fill_color)
+    draw.rectangle(((0,config.fill_y_start),(854,config.fill_y_stop)), fill=config.fill_color)
 
     artist_w,artist_h = font.getsize(artist)
-    artist_start = (854 - artist_w) // 2
+    artist_x_offset = (854 - artist_w) // 2
 
     # Write artist and underline it
-    draw.text((artist_start, 350), artist, fill=config.font_color, font=font)
-    draw.line(((artist_start, 350 + artist_h + 4),(854 - artist_start, 350 + artist_h + 4)), fill=config.line_color)
+    draw.text((artist_x_offset, config.fill_y_start), artist, fill=config.font_color, font=font)
+    draw.line(((artist_x_offset, config.fill_y_start + artist_h + 4),(854 - artist_x_offset, config.fill_y_start + artist_h + 4)), fill=config.line_color)
 
     fontsize = config.font_size
     while True:
         font = ImageFont.truetype(config.font, fontsize)
-        w,h = font.getsize(title)
-        if w < 854 - 50:
+        title_w, title_h = font.getsize(title)
+        if title_w < 854 - fontsize:
             break
         fontsize -= 1
-        print('Resizing font: ' + str(fontsize))
+        print('Resizing font so the title fits: ' + str(fontsize))
         if fontsize == 1:
             font = ImageFont.truetype(config.font, config.font_size // 2)
 
-    draw.text(((854 - w) // 2, 420), title, fill=config.font_color, font=font)
+    title_y_offset = config.fill_y_start + artist_h + 8
+    draw.text(((854 - title_w) // 2, title_y_offset), title, fill=config.font_color, font=font)
     del draw
 
-    poster.save(config.png_file)
+    poster.save(config.png_poster_file)
 
 def mkv_encode(config):
     ff = FF(global_options='-hide_banner -y -loop 1 -framerate 1',
-            inputs={config.png_file: None, config.audio_in: None},
-            outputs={config.mkv_file: '-c:v libx264 -preset veryfast -tune stillimage -crf 18 -c:a aac -b:a 128k -strict experimental -shortest -pix_fmt yuv420p'})
+            inputs={config.png_poster_file: None, config.audio_in: None},
+            outputs={config.mkv_file: '-c:v libx264 -preset fast -tune stillimage -crf 18 -c:a aac -strict experimental -b:a 160k -shortest -pix_fmt yuv420p'})
     print(ff.cmd_str)
     ff.run()
 
@@ -228,5 +238,6 @@ if __name__ == '__main__':
     ogg_encode(config)
     ogg_tag(config)
     ogg_coverart(config)
+    png_header(config)
     png_poster(config)
     mkv_encode(config)

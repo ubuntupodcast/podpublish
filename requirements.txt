@@ -1,5 +1,8 @@
 configobj
 ffmpy
+google-api-python-client
 mutagen
+oauth2client
 pillow
 pydub
+-e git+https://github.com/tokland/youtube-upload.git#egg=youtube_upload

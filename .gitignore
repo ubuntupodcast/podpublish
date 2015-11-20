@@ -41,6 +41,7 @@ build
 dist
 eggs
 sdist
+src
 develop-eggs
 .installed.cfg
 

@@ -44,12 +44,10 @@ class Configuration(object):
         self.episode_prefix = self.config['episode']['prefix']
 
         # mp3
-        self.mp3_bitrate = self.config['mp3']['bitrate']
-        self.mp3_channels = self.config['mp3']['channels']
+        self.mp3 = self.config['mp3']
 
         # ogg
-        self.ogg_bitrate = self.config['ogg']['bitrate']
-        self.ogg_channels = self.config['ogg']['channels']
+        self.ogg = self.config['ogg']
 
         # season
         self.season = self.config['season']['number']
@@ -59,19 +57,35 @@ class Configuration(object):
         self.tags = self.config['tags']
 
         # files
-        self.file_out = self.basename + self.seperator + self.season_prefix + self.season + self.episode_prefix + self.episode
+        self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode
+        self.file_out = self.basename + self.seperator + self.episode_code
         self.mkv_file = self.file_out + '.mkv'
         self.mp3_file = self.file_out + '.mp3'
         self.ogg_file = self.file_out + '.ogg'
         self.png_header_file = self.file_out + '_header.png'
         self.png_poster_file = self.file_out + '_poster.png'
 
-def mp3_encode(config):
-    print("Encoding " + config.mp3_file)
-    AudioSegment.from_file(config.audio_in).export(config.mp3_file,
-        bitrate=config.mp3_bitrate,
-        format='mp3',
-        parameters=['-ac', config.mp3_channels]
+def audio_encode(config, audio_format):
+    if audio_format is 'mp3':
+        audio_file = config.mp3_file
+        audio_bitrate = config.mp3['bitrate']
+        audio_channels = config.mp3['channels']
+        audio_codec = config.mp3['codec']
+    elif audio_format is 'ogg':
+        audio_file = config.ogg_file
+        audio_bitrate = config.ogg['bitrate']
+        audio_channels = config.ogg['channels']
+        audio_codec = config.ogg['codec']
+    else:
+        print("ERROR! Unkown audio format requested. Abort.")
+        sys.exit(1)
+
+    print("Encoding " + audio_file)
+    AudioSegment.from_file(config.audio_in).export(audio_file,
+        bitrate=audio_bitrate,
+        codec=audio_codec,
+        format=audio_format,
+        parameters=['-ac', audio_channels]
         )
 
 def mp3_tag(config):
@@ -112,15 +126,6 @@ def mp3_coverart(config):
                         data=imgdata))
     audio.save()
 
-
-def ogg_encode(config):
-    print("Encoding " + config.ogg_file)
-    AudioSegment.from_file(config.audio_in).export(config.ogg_file,
-        bitrate=config.ogg_bitrate,
-        format='ogg',
-        codec='libvorbis',
-        parameters=['-ac', config.ogg_channels]
-        )
 
 def ogg_tag(config):
     print("Tagging " + config.ogg_file)
@@ -224,18 +229,35 @@ def png_poster(config):
     poster.save(config.png_poster_file)
 
 def mkv_encode(config):
-    ff = FF(global_options='-hide_banner -y -loop 1 -framerate 1',
+    ff = FF(global_options='-hide_banner -y -loop 1 -framerate 2',
             inputs={config.png_poster_file: None, config.audio_in: None},
-            outputs={config.mkv_file: '-c:v libx264 -preset fast -tune stillimage -crf 18 -c:a aac -strict experimental -b:a 160k -shortest -pix_fmt yuv420p'})
+            outputs={config.mkv_file: '-c:v libx264 -preset veryfast -tune stillimage -crf 18 -c:a aac -strict experimental -b:a 160k -shortest -pix_fmt yuv420p'})
     print(ff.cmd_str)
     ff.run()
 
+def youtube_upload(config):
+    print("Uploading " + config.mkv_file + ' to Youtube')
+    # TODO: Everything so far is written for Python 3.4+ and the API
+    #       provided by Google is for Python 2.x Gah!
+    #       Use youtube-upload instead - https://www.youtube.com/watch?v=IX8xlnk54Mg&feature=youtu.be
+
+    # Wrap something like the following:
+    """
+    youtube-upload --title="Season 8 Episode 37 - Code Name K.O.Z."
+                   --category="Science & Technology"
+                   --description="We discuss what's been happening in the news and the Ubuntu community"
+                   --privacy=unlisted
+                   --playlist="Season 8"
+                   --client-secrets=~/Dropbox/UbuntuPodcast/youtube_upload_client_secret.json
+                   --credentials-file=/home/martin/.youtube-upload-credentials.json
+    """
+
 if __name__ == '__main__':
     config = Configuration('podcoder.ini')
-    mp3_encode(config)
+    audio_encode(config, 'mp3')
     mp3_tag(config)
     mp3_coverart(config)
-    ogg_encode(config)
+    audio_encode(config, 'ogg')
     ogg_tag(config)
     ogg_coverart(config)
     png_header(config)

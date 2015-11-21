@@ -249,7 +249,7 @@ def png_poster(config):
 
 def mkv_encode(config, copy_audio = False):
     global_options='-y -loop 1 -framerate 1 -pix_fmt yuv420p'
-    inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, None)])
+    inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, '-itsoffset 1.0')])
     if copy_audio:
         outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a copy -shortest')])
     else:

@@ -6,6 +6,7 @@
 
 import base64
 import configobj
+import optparse
 import sys
 import validate
 from ffmpy import FF
@@ -16,6 +17,7 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.id3 import APIC, COMM, ID3, error
 from pydub import AudioSegment
 from PIL import Image, ImageDraw, ImageFont
+from youtube_upload import main as yt
 
 class Configuration(object):
 
@@ -55,6 +57,9 @@ class Configuration(object):
 
         # tags
         self.tags = self.config['tags']
+
+        # youtube
+        self.youtube = self.config['youtube']
 
         # files
         self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode
@@ -236,21 +241,43 @@ def mkv_encode(config):
     ff.run()
 
 def youtube_upload(config):
-    print("Uploading " + config.mkv_file + ' to Youtube')
-    # TODO: Everything so far is written for Python 3.4+ and the API
-    #       provided by Google is for Python 2.x Gah!
-    #       Use youtube-upload instead - https://www.youtube.com/watch?v=IX8xlnk54Mg&feature=youtu.be
+    print("Uploading " + config.mkv_file + ' to YouTube')
+    # The reference YouTube API provided by doesn't support playlists,
+    # so wrap youtube-upload instead.
+    #  * https://github.com/tokland/youtube-upload
+    #  * https://www.youtube.com/watch?v=IX8xlnk54Mg
 
-    # Wrap something like the following:
-    """
-    youtube-upload --title="Season 8 Episode 37 - Code Name K.O.Z."
-                   --category="Science & Technology"
-                   --description="We discuss what's been happening in the news and the Ubuntu community"
-                   --privacy=unlisted
-                   --playlist="Season 8"
-                   --client-secrets=~/Dropbox/UbuntuPodcast/youtube_upload_client_secret.json
-                   --credentials-file=/home/martin/.youtube-upload-credentials.json
-    """
+    parser = optparse.OptionParser()
+    # Video metadata
+    parser.add_option('', '--title', dest='title', type="string")
+    parser.add_option('', '--category', dest='category', type="string")
+    parser.add_option('', '--description', dest='description', type="string")
+    parser.add_option('', '--tags', dest='tags', type="string")
+    parser.add_option('', '--privacy', dest='privacy', metavar="STRING", default="public")
+    parser.add_option('', '--publish-at', dest='publish_at', metavar="datetime", default=None)
+    parser.add_option('', '--location', dest='location', type="string", default=None, metavar="latitude=VAL,longitude=VAL[,altitude=VAL]")
+    parser.add_option('', '--thumbnail', dest='thumb', type="string")
+    parser.add_option('', '--playlist', dest='playlist', type="string")
+    parser.add_option('', '--title-template', dest='title_template', type="string", default="{title} [{n}/{total}]", metavar="STRING")
+    # Authentication
+    parser.add_option('', '--client-secrets', dest='client_secrets', type="string")
+    parser.add_option('', '--credentials-file', dest='credentials_file', type="string")
+    parser.add_option('', '--auth-browser', dest='auth_browser', action='store_true')
+    #Additional options
+    parser.add_option('', '--open-link', dest='open_link', action='store_true')
+
+    arguments = ["--title=" + config.tags['album'] + " " + config.tags['title'],
+                 "--category=" + config.youtube['category'],
+                 "--description=" + config.tags['comments'],
+                 "--privacy=" + config.youtube['privacy'],
+                 "--playlist=" + config.tags['album'],
+                 "--client-secrets=" + config.youtube['client_secrets'],
+                 "--credentials-file=" + config.youtube['credentials_file'],
+                 "--tags=" + config.youtube['tags'],
+                 config.mkv_file]
+
+    options, args = parser.parse_args(arguments)
+    yt.run_main(parser, options, args)
 
 if __name__ == '__main__':
     config = Configuration('podcoder.ini')
@@ -263,3 +290,4 @@ if __name__ == '__main__':
     png_header(config)
     png_poster(config)
     mkv_encode(config)
+    youtube_upload(config)

@@ -10,7 +10,9 @@ import re
 import sys
 from mutagen.easyid3 import EasyID3, EasyID3KeyError
 from mutagen.oggvorbis import OggVorbis
-from podpublish import podcoder
+from podpublish import configuration
+from podpublish import encoder
+from podpublish import uploader
 
 def get_files(audio_in, audio_format):
     files = [os.path.join(dirpath, f)
@@ -31,7 +33,7 @@ def get_tags(audio_file, audio_format):
 def main():
     AUDIO_FORMAT='ogg'
 
-    config = podcoder.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
+    config = configuration.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
     audio_files = get_files(config.audio_in, AUDIO_FORMAT)
 
     for audio_file in audio_files:
@@ -51,12 +53,12 @@ def main():
             # Pull in the title from the mp3 tags.
             config.tags['title'] = tags['title'][0]
 
-            podcoder.png_poster(config)
-            podcoder.mkv_encode(config, True)
+            encoder.png_poster(config)
+            encoder.mkv_encode(config, True)
             os.remove(config.png_poster_file)
 
         # TODO: Check if the file is already uploaded.
-        #youtube_upload(config)
+        #uploader.youtube_upload(config)
 
 if __name__ == '__main__':
     main()

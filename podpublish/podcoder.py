@@ -9,6 +9,7 @@ import configobj
 import optparse
 import sys
 import validate
+from collections import OrderedDict
 from ffmpy import FF
 from mutagen.easyid3 import EasyID3, EasyID3KeyError
 from mutagen.flac import Picture
@@ -17,7 +18,10 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.id3 import APIC, COMM, ID3, error
 from pydub import AudioSegment
 from PIL import Image, ImageDraw, ImageFont
-from youtube_upload import main as yt
+try:
+    from youtube_upload import main as yt
+except:
+    print("WARNING! The youtube_upload failed to import.")
 
 class Configuration(object):
 
@@ -62,6 +66,15 @@ class Configuration(object):
         self.youtube = self.config['youtube']
 
         # files
+        self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode
+        self.file_out = self.basename + self.seperator + self.episode_code
+        self.mkv_file = self.file_out + '.mkv'
+        self.mp3_file = self.file_out + '.mp3'
+        self.ogg_file = self.file_out + '.ogg'
+        self.png_header_file = self.file_out + '_header.png'
+        self.png_poster_file = self.file_out + '_poster.png'
+
+    def update_filename(self):
         self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode
         self.file_out = self.basename + self.seperator + self.episode_code
         self.mkv_file = self.file_out + '.mkv'
@@ -196,7 +209,8 @@ def png_header(config):
 
 def png_poster(config):
     # Poster images for use in YouTube videos are hardcoded to 854x480.
-    # No pressing need for higher resolution images for still videos.
+    # Let's just agree that Stuart Langridge and Martin Wimpress did
+    # their homework and this is how it is going to be ;-)
     print("Creating " + config.png_poster_file)
     artist = config.tags['artist']
     title = config.tags['album'] + ' ' + config.tags['title']
@@ -223,7 +237,7 @@ def png_poster(config):
         if title_w < 854 - fontsize:
             break
         fontsize -= 1
-        print('Resizing font so the title fits: ' + str(fontsize))
+        #print('Resizing font so the title fits: ' + str(fontsize))
         if fontsize == 1:
             font = ImageFont.truetype(config.font, config.font_size // 2)
 
@@ -233,10 +247,15 @@ def png_poster(config):
 
     poster.save(config.png_poster_file)
 
-def mkv_encode(config):
-    ff = FF(global_options='-hide_banner -y -loop 1 -framerate 2',
-            inputs={config.png_poster_file: None, config.audio_in: None},
-            outputs={config.mkv_file: '-c:v libx264 -preset veryfast -tune stillimage -crf 18 -c:a aac -strict experimental -b:a 160k -shortest -pix_fmt yuv420p'})
+def mkv_encode(config, copy_audio = False):
+    global_options='-y -loop 1 -framerate 1'
+    inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, None)])
+    if copy_audio:
+        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset medium -tune stillimage -c:a copy -shortest -pix_fmt yuv420p')])
+    else:
+        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset medium -tune stillimage -c:a aac -strict experimental -b:a 256k -shortest -pix_fmt yuv420p')])
+
+    ff = FF(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd_str)
     ff.run()
 
@@ -279,7 +298,8 @@ def youtube_upload(config):
     options, args = parser.parse_args(arguments)
     yt.run_main(parser, options, args)
 
-if __name__ == '__main__':
+
+def main():
     config = Configuration('podcoder.ini')
     audio_encode(config, 'mp3')
     mp3_tag(config)
@@ -291,3 +311,6 @@ if __name__ == '__main__':
     png_poster(config)
     mkv_encode(config)
     youtube_upload(config)
+
+if __name__ == '__main__':
+    main()

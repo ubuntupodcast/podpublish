@@ -248,12 +248,12 @@ def png_poster(config):
     poster.save(config.png_poster_file)
 
 def mkv_encode(config, copy_audio = False):
-    global_options='-y -loop 1 -framerate 1'
+    global_options='-y -loop 1 -framerate 1 -pix_fmt yuv420p'
     inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, None)])
     if copy_audio:
-        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset medium -tune stillimage -c:a copy -shortest -pix_fmt yuv420p')])
+        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a copy -shortest')])
     else:
-        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset medium -tune stillimage -c:a aac -strict experimental -b:a 256k -shortest -pix_fmt yuv420p')])
+        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a aac -strict experimental -b:a 384k -shortest')])
 
     ff = FF(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd_str)

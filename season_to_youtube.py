@@ -29,7 +29,7 @@ def get_tags(audio_file, audio_format):
         sys.exit(1)
 
 def main():
-    AUDIO_FORMAT='mp3'
+    AUDIO_FORMAT='ogg'
 
     config = podcoder.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
     audio_files = get_files(config.audio_in, AUDIO_FORMAT)

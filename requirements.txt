@@ -6,4 +6,4 @@ oauth2client
 pillow
 pydub
 python-telegram-bot
--e git+https://github.com/tokland/youtube-upload.git#egg=youtube_upload
+https://github.com/tokland/youtube-upload/archive/master.zip

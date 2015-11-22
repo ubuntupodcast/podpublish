@@ -5,7 +5,4 @@
   * Code is brittle, needs some error checking.
   * Configuration to control what encodes/uploads are enabled.
   * Publish to Wordpress.
-  * Publish to Telegram using python-telegram-bot.
-  * Publish to Reddit.
-  * Publish to Discourse.
 

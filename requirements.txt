@@ -5,5 +5,5 @@ mutagen
 oauth2client
 pillow
 pydub
-python-telegram-bot
+pysftp
 https://github.com/tokland/youtube-upload/archive/master.zip

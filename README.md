@@ -95,9 +95,11 @@ file.
 
     mkdir /home/yourusername/.ssh
 
-Add the content of  `~/PodPublish.pub` to /home/yourusername/.ssh/
+Add the content of `~/PodPublish.pub` to `/home/yourusername/.ssh/authorized_keys`
 
     nano /home/yourusername/.ssh/authorized_keys
+
+Set the `~/.ssh` file/directory permissions.
 
     chmod 600 /home/yourusername/.ssh/authorized_keys
     chmod 700 /home/yourusername/.ssh/

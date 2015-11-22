@@ -55,6 +55,43 @@ To upload to YouTube you'll need a Google account with associated
 YouTube channel, the YouTube Data API will need to be enabled and
 OAuth 2.0 client-secret generated.
 
+The reference YouTube API provided by doesn't support playlists, or
+setting a publishing date, so [youtube-upload](https://github.com/tokland/youtube-upload)
+is used instead. The following video maybe helpful in enabling the
+YouTube Data API and creating client secrets.
+
+  * https://www.youtube.com/watch?v=IX8xlnk54Mg
+
+### Uploading via sftp
+
+This is how to create an account, on Ubuntu, that has sftp access via
+key based authentication.
+
+#### On your workstation
+
+Generate a ssh key pair. This will create `~/PodPublish.key`
+(the private key) and `~/PodPublish.pub` (the public key).
+
+    ssh-keygen -b 4096 -t rsa -N yoursupersecretpassphrase -C "Podcast Publisher" -f ~/PodPublish
+
+#### On the server
+
+    sudo apt-get install ssh
+    sudo adduser --gecos "Podcast Publisher" --disabled-password yourusername
+
+As `root` do the following on the server to create the `authorized_keys`
+file.
+
+    mkdir /home/yourusername/.ssh
+
+Add the content of  `~/PodPublish.pub` to /home/yourusername/.ssh/
+
+    nano /home/yourusername/.ssh/authorized_keys
+
+    chmod 600 /home/yourusername/.ssh/authorized_keys
+    chmod 700 /home/yourusername/.ssh/
+    chown -R yourusername: /home/yourusername/.ssh
+
 ## Source Code
 
 Source code is available from BitBucket.

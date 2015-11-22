@@ -5,7 +5,6 @@
 # See the file "LICENSE" for the full license governing this code.
 
 import base64
-import optparse
 import sys
 from collections import OrderedDict
 from ffmpy import FF
@@ -70,14 +69,12 @@ def mp3_coverart(config):
     imgdata = open(config.coverart,'rb').read()
 
     audio=MP3(config.mp3_file, ID3=ID3);
-    # FIXME: Derive the image mime type.
     audio.tags.add(APIC(encoding=3,
-                        mime='image/png',
+                        mime=config.covert_mime,
                         type=3,
-                        desc=u'Cover',
+                        desc='Cover',
                         data=imgdata))
     audio.save()
-
 
 def ogg_tag(config):
     print("Tagging " + config.ogg_file)
@@ -99,21 +96,19 @@ def ogg_coverart(config):
     p = Picture()
     p.data = imgdata
     p.type = 3
-    p.desc = u'Cover'
-    # FIXME: Derive the image mime type.
-    p.mime = 'image/png';
+    p.desc = 'Cover'
+    p.mime = config.coverart_mime
     p.width = w
     p.height = h
     p.depth = 24
-    dt=p.write();
-    enc=base64.b64encode(dt).decode('ascii');
+    dt=p.write()
+    enc=base64.b64encode(dt).decode('ascii')
 
     audio = OggVorbis(config.ogg_file)
-    audio['metadata_block_picture']=[enc];
+    audio['metadata_block_picture']=[enc]
     audio.save()
 
 def img_resize(img_file, width, height):
-    #response = requests.get(headerimageurl)
     img = Image.open(img_file)
 
     # Check the image size.

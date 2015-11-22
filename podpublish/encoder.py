@@ -37,7 +37,7 @@ def audio_encode(config, audio_format):
         bitrate=audio_bitrate,
         codec=audio_codec,
         format=audio_format,
-        parameters=['-ac', audio_channels]
+        parameters=['-ac', audio_channels, '-threads', '0']
         )
 
 def mp3_tag(config):

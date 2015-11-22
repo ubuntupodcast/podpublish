@@ -34,22 +34,33 @@ will soon be made into a generic tool useful to other podcasters.
 To encode an audio file to `.mp3`, `.ogg` and `.mkv` (for uploading to
 YouTube, do the following.
 
-  * Edit the example `podcoder.ini`.
-  * Execute `./podcoder.py`.
+The `skip` options will bypass encoding is set to `True`.
+
+  * Edit the example `podcast.ini`.
+  * Execute `./encode_podcast.py`.
+
+### Publishing a single podcast
+
+The `skip` options will bypass publishing if set to `True`.
+
+  * Edit the example `podcast.ini`.
+  * Execute `./publish_podcast.py`.
 
 ### Encoding a season of podcasts
 
-To encode a season of audio files, either in `.mp3` or `.ogg` format,
-to `.mkv` and uploading them to YouTube, do the following.
+To encode a season of audio files, from existing `.mp3` or `.ogg` files
+, encode them to `.mkv` and upload them to YouTube, do the following.
 
   * Edit the example `season-to-youtube.ini`.
-  * Execute `./season-to-youtube.py`.
+  * Execute `./season-to-youtube`.
 
 The season encoder/uploader expects derive the each Episode number from
 the source audio filename and each episode Title from tags embedded in
 the source audio files.
 
-### YouTube API
+### Publishing targets
+
+#### YouTube API
 
 To upload to YouTube you'll need a Google account with associated
 YouTube channel, the YouTube Data API will need to be enabled and
@@ -62,7 +73,7 @@ YouTube Data API and creating client secrets.
 
   * https://www.youtube.com/watch?v=IX8xlnk54Mg
 
-### Uploading via sftp
+#### sftp
 
 This is how to create an account, on Ubuntu, that has sftp access via
 key based authentication.

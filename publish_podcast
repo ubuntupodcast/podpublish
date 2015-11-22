@@ -8,7 +8,7 @@ from podpublish import configuration
 from podpublish import uploader
 
 def main():
-    config = configuration.Configuration('podcoder.ini')
+    config = configuration.Configuration('podcast.ini')
 
     if not config.mp3['skip'] and not config.sftp['skip']:
         uploader.sftp_upload(config, config.mp3_file)

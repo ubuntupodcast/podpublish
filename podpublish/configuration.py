@@ -15,6 +15,13 @@ class Configuration(object):
 
         # artwork
         self.coverart = self.config['artwork']['coverart']
+        if self.coverart.endswith('.png'):
+            self.coverart_mime = 'image/png'
+        elif self.coverart.endswith('.gif'):
+            self.coverart_mime = 'image/gif'
+        elif self.coverart.endswith('.jpg') or self.coverart.endswith('.jpeg'):
+            self.coverart_mime = 'image/jpeg'
+
         self.backdrop = self.config['artwork']['backdrop']
         self.font = self.config['artwork']['font']
         self.font_size = int(self.config['artwork']['font_size'])
@@ -42,6 +49,10 @@ class Configuration(object):
         # season
         self.season = self.config['season']['number']
         self.season_prefix = self.config['season']['prefix']
+
+        # sftp
+        self.sftp = self.config['sftp']
+        self.sftp['port'] = int(self.sftp['port'])
 
         # tags
         self.tags = self.config['tags']

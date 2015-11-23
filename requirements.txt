@@ -4,6 +4,7 @@ google-api-python-client
 mutagen
 oauth2client
 pillow
+progressbar33
 pydub
 pysftp
 https://github.com/tokland/youtube-upload/archive/master.zip

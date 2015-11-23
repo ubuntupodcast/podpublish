@@ -7,4 +7,5 @@ pillow
 progressbar33
 pydub
 pysftp
+python-resize-image
 https://github.com/tokland/youtube-upload/archive/master.zip

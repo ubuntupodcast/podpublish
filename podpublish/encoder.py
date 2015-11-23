@@ -22,12 +22,12 @@ def audio_encode(config, audio_format):
         audio_file = config.mp3_file
         audio_bitrate = config.mp3['bitrate']
         audio_channels = config.mp3['channels']
-        audio_codec = config.mp3['codec']
+        audio_codec = 'libmp3lame'
     elif audio_format is 'ogg':
         audio_file = config.ogg_file
         audio_bitrate = config.ogg['bitrate']
         audio_channels = config.ogg['channels']
-        audio_codec = config.ogg['codec']
+        audio_codec = 'libvorbis'
     else:
         print("ERROR! Unkown audio format requested. Abort.")
         sys.exit(1)

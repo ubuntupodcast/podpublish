@@ -81,6 +81,8 @@ class Configuration(object):
         self.fill_y_stop = int(self.config['artwork']['fill_y_stop'])
         self.img_header_width = int(self.config['artwork']['header_width'])
         self.img_header_height = int(self.config['artwork']['header_height'])
+        self.img_poster_width = int(self.config['artwork']['poster_width'])
+        self.img_poster_height = int(self.config['artwork']['poster_height'])
 
         # episode
         self.audio_in = self.config['episode']['audio_in']

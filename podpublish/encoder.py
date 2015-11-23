@@ -65,12 +65,12 @@ def mp3_tag(config):
     audio.save(config.mp3_file)
 
 def mp3_coverart(config):
-    print("Adding cover art to " + config.mp3_file)
+    print("Adding " + config.coverart_mime +  " cover art to " + config.mp3_file)
     imgdata = open(config.coverart,'rb').read()
 
     audio=MP3(config.mp3_file, ID3=ID3);
     audio.tags.add(APIC(encoding=3,
-                        mime=config.covert_mime,
+                        mime=config.coverart_mime,
                         type=3,
                         desc='Cover',
                         data=imgdata))
@@ -86,7 +86,7 @@ def ogg_tag(config):
     audio.save()
 
 def ogg_coverart(config):
-    print("Adding cover art to " + config.ogg_file)
+    print("Adding " + config.coverart_mime +  " cover art to " + config.ogg_file)
     coverart = config.coverart
     imgdata = open(coverart,'rb').read()
 

@@ -62,14 +62,36 @@ the source audio files.
 
 #### YouTube API
 
+The reference YouTube API provided by Google doesn't support playlists,
+nor setting a publishing date, so [youtube-upload](https://github.com/tokland/youtube-upload)
+is used instead.
+
 To upload to YouTube you'll need a Google account with associated
 YouTube channel, the YouTube Data API will need to be enabled and
 OAuth 2.0 client-secret generated.
 
-The reference YouTube API provided by doesn't support playlists, or
-setting a publishing date, so [youtube-upload](https://github.com/tokland/youtube-upload)
-is used instead. The following video maybe helpful in enabling the
-YouTube Data API and creating client secrets.
+The Youtube API uses [OAuth 2.0](https://developers.google.com/accounts/docs/OAuth2)
+to authenticate the upload. The first time you try to upload a video,
+you will be asked to follow a URL in your browser to get an authentication
+token. You can use multiple credentials, just use edit the option
+`credentials-file=`. Also, check the [token expiration](https://developers.google.com/youtube/v3/)
+policies.
+
+If you plan to make a heavy use of the script, please
+[create and use your own OAuth 2.0 file](https://developers.google.com/youtube/registering_an_application),
+it's a free service. Steps:
+
+  * Go to the Google [console](https://console.developers.google.com/).
+  * _Create project_.
+  * Side menu: _APIs & auth_ -> _APIs_
+  * Top menu: _Enabled API(s)_: Enable all Youtube APIs.
+  * Side menu: _APIs & auth_ -> _Credentials_.
+  * _Create a Client ID_: Add credentials -> OAuth 2.0 Client ID -> Other -> Name: youtube-upload -> Create -> OK
+  * _Download JSON_: Under the section "OAuth 2.0 client IDs". Save the file to your local system.
+  * Use this JSON as your credentials file: `client-secrets=CLIENT_SECRETS`
+
+The following video may also be helpful in enabling the YouTube Data API
+and creating client secrets.
 
   * https://www.youtube.com/watch?v=IX8xlnk54Mg
 

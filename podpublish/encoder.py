@@ -15,6 +15,7 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.id3 import APIC, COMM, ID3, error
 from pydub import AudioSegment
 from PIL import Image, ImageDraw, ImageFont
+from resizeimage import resizeimage
 
 def audio_encode(config, audio_format):
     if audio_format is 'mp3':
@@ -108,33 +109,12 @@ def ogg_coverart(config):
     audio['metadata_block_picture']=[enc]
     audio.save()
 
-def img_resize(img_file, width, height):
-    img = Image.open(img_file)
-
-    # Check the image size.
-    if img.size[0] < width or img.size[1] < height:
-        print("Sorry, the image needs to larger than the requested resize. Abort.")
-        sys.exit(1)
-
-    scale_x_down_by = img.size[0] // width
-    scale_y_down_by = img.size[1] // height
-
-    if scale_x_down_by > scale_y_down_by:
-        resize_to = (int(img.size[0] // scale_y_down_by), height)
-        x_border = int(resize_to[0]) - width
-        crop = (x_border // 2, 0, width + (x_border // 2), height)
-    else:
-        resize_to = (width, int(img.size[1] // scale_x_down_by))
-        y_border = int(resize_to[1]) - height
-        crop = (0, y_border // 2, width, height + (y_border // 2))
-    img.thumbnail(resize_to, Image.ANTIALIAS)
-    cropped = img.crop(crop)
-    return cropped
-
 def png_header(config):
     print("Creating " + config.png_header_file)
-    header = img_resize(config.backdrop, config.img_header_width, config.img_header_height)
-    header.save(config.png_header_file)
+    with open(config.backdrop, 'r+b') as f:
+        with Image.open(f) as image:
+            cover = resizeimage.resize_cover(image, [config.img_header_width, config.img_header_height])
+            cover.save(config.png_header_file, 'png')
 
 def png_poster(config):
     # Poster images for use in YouTube videos are hardcoded to 854x480.
@@ -145,36 +125,36 @@ def png_poster(config):
     title = config.tags['album'] + ' ' + config.tags['title']
     font = ImageFont.truetype(config.font, config.font_size)
 
-    image = img_resize(config.backdrop, config.img_header_width, config.img_header_height)
-    image.thumbnail((854, 534), Image.ANTIALIAS)
-    poster = image.crop((0,(534-480)//2,854,534-((534-480)//2)))
+    with open(config.backdrop, 'r+b') as f:
+        with Image.open(f) as image:
+            poster = resizeimage.resize_cover(image, [config.img_poster_width, config.img_poster_height])
 
     draw = ImageDraw.Draw(poster)
-    draw.rectangle(((0,config.fill_y_start),(854,config.fill_y_stop)), fill=config.fill_color)
+    draw.rectangle(((0,config.fill_y_start),(config.img_poster_width, config.fill_y_stop)), fill=config.fill_color)
 
     artist_w,artist_h = font.getsize(artist)
-    artist_x_offset = (854 - artist_w) // 2
+    artist_x_offset = (config.img_poster_width - artist_w) // 2
 
     # Write artist and underline it
     draw.text((artist_x_offset, config.fill_y_start), artist, fill=config.font_color, font=font)
-    draw.line(((artist_x_offset, config.fill_y_start + artist_h + 4),(854 - artist_x_offset, config.fill_y_start + artist_h + 4)), fill=config.line_color)
+    draw.line(((artist_x_offset, config.fill_y_start + artist_h + 4),(config.img_poster_width - artist_x_offset, config.fill_y_start + artist_h + 4)), fill=config.line_color)
 
     fontsize = config.font_size
     while True:
         font = ImageFont.truetype(config.font, fontsize)
         title_w, title_h = font.getsize(title)
-        if title_w < 854 - fontsize:
+        if title_w < config.img_poster_width - fontsize:
             break
         fontsize -= 1
-        #print('Resizing font so the title fits: ' + str(fontsize))
         if fontsize == 1:
-            font = ImageFont.truetype(config.font, config.font_size // 2)
+            print("ERROR! Can't fit title on the poster. Abort.")
+            sys.exit(1)
 
     title_y_offset = config.fill_y_start + artist_h + 8
-    draw.text(((854 - title_w) // 2, title_y_offset), title, fill=config.font_color, font=font)
+    draw.text(((config.img_poster_width - title_w) // 2, title_y_offset), title, fill=config.font_color, font=font)
     del draw
 
-    poster.save(config.png_poster_file)
+    poster.save(config.png_poster_file, 'png')
 
 def mkv_encode(config, copy_audio = False):
     # Reference for aac encoding

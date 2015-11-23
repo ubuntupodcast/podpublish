@@ -4,8 +4,10 @@
 # http://www.ubuntupodcast.org
 # See the file "LICENSE" for the full license governing this code.
 
+import argparse
 import glob
 import os
+import podpublish
 import re
 import sys
 from mutagen.easyid3 import EasyID3, EasyID3KeyError
@@ -35,6 +37,11 @@ def touch(fname, times=None):
         os.utime(fname, times)
 
 def main():
+    parser = argparse.ArgumentParser(description='Encode a season of existing podcasts to mkv and upload them to YouTube.')
+    parser.add_argument('--version', action='version', version=podpublish.__version__)
+    parser.add_argument('filename', type=argparse.FileType('r'), help="Podcast configuration file.")
+    args = parser.parse_args()
+
     AUDIO_FORMAT='mp3'
 
     config = configuration.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')

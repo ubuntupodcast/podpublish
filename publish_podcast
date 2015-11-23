@@ -4,20 +4,34 @@
 # http://www.ubuntupodcast.org
 # See the file "LICENSE" for the full license governing this code.
 
+import os
+import sys
 from podpublish import configuration
 from podpublish import uploader
 
 def main():
     config = configuration.Configuration('podcast.ini')
 
-    if not config.mp3['skip'] and not config.sftp['skip']:
-        uploader.sftp_upload(config, config.mp3_file)
+    if not config.skip_mp3 and not config.skip_sftp:
+        if os.path_isfile(config.mp3_file):
+            uploader.sftp_upload(config, config.mp3_file)
+        else:
+            print('ERROR! ' + config.mp3_file + ' is missing. Abort.')
+            sys.exit(1)
 
-    if not config.mp3['skip'] and not config.sftp['skip']:
-        uploader.sftp_upload(config, config.ogg_file)
+    if not config.skip_mp3 and not config.skip_sftp:
+        if os.path_isfile(config.ogg_file):
+            uploader.sftp_upload(config, config.ogg_file)
+        else:
+            print('ERROR! ' + config.ogg_file + ' is missing. Abort.')
+            sys.exit(1)
 
-    if not config.youtube['skip']:
-        uploader.youtube_upload(config)
+    if not config.skip_youtube:
+        if os.path_isfile(config.mkv_file):
+            uploader.youtube_upload(config)
+        else:
+            print('ERROR! ' + config.mkv_file + ' is missing. Abort.')
+            sys.exit(1)
 
 if __name__ == '__main__':
     main()

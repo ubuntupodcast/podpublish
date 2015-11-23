@@ -1,7 +1,5 @@
 ## TODO
 
   * Use argparse to take a single .ini file as an argument.
-  * If file path config entries start with `~/` then correctly expand the home directory.
   * Validate the ConfigObj configuration.
-  * Code is brittle, needs error checking added throughout.
   * Publish to Wordpress.

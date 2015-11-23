@@ -94,9 +94,12 @@ def youtube_upload(config):
                  "--client-secrets=" + config.youtube['client_secrets'],
                  "--credentials-file=" + config.youtube['credentials_file'],
                  "--tags=" + config.youtube['tags'],
+                 "--publish-at=" + config.youtube['publish_at'],
                  config.mkv_file]
 
     options, args = parser.parse_args(arguments)
+    #print(options)
+    #print(args)
     yt.run_main(parser, options, args)
 
 if __name__ == '__main__':

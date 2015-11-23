@@ -18,7 +18,7 @@ def check_exists(file_in):
 class Configuration(object):
 
     def __init__(self, ini_file):
-        # FIXME: Add error checking
+        # TODO: Use a ConfigSpec to validate the ini file.
         self.config = configobj.ConfigObj(ini_file)
 
         # expand any relative file paths.

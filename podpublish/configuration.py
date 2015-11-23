@@ -69,6 +69,12 @@ class Configuration(object):
         self.png_header_file = self.file_out + '_header.png'
         self.png_poster_file = self.file_out + '_poster.png'
 
+        # what features are skipped
+        self.skip_mp3 = self.config.get('mp3').as_bool('skip')
+        self.skip_ogg = self.config.get('ogg').as_bool('skip')
+        self.skip_sftp = self.config.get('sftp').as_bool('skip')
+        self.skip_youtube = self.config.get('youtube').as_bool('skip')
+
     def update_filename(self):
         self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode
         self.file_out = self.basename + self.seperator + self.episode_code

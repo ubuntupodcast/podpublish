@@ -66,6 +66,7 @@ pylint.log
 *.mp3
 *.ogg
 *.mkv
+*.upload
 
 # Keep empty directories:
 !*/.git*

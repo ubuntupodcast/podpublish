@@ -1,4 +1,6 @@
 ## TODO
 
-  * Publish to Wordpress.
-  * Validate the ConfigObj configuration.
+  * Publish to Wordpress support.
+  * Add `--dry-run` argument to `publish_podcast`.
+  * Use `validate` and a ConfigSpec to validate the `.ini`. This may not
+  play nicely with string interpolation.

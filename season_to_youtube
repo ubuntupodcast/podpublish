@@ -30,11 +30,17 @@ def get_tags(audio_file, audio_format):
         print("ERROR! Unknown audio format. Abort.")
         sys.exit(1)
 
+def touch(fname, times=None):
+    with open(fname, 'a'):
+        os.utime(fname, times)
+
 def main():
     AUDIO_FORMAT='ogg'
 
     config = configuration.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
     audio_files = get_files(config.audio_in, AUDIO_FORMAT)
+
+    comment_suffix = config.tags['comments']
 
     for audio_file in audio_files:
         # Ignore the low bitrate files
@@ -52,13 +58,15 @@ def main():
 
             # Pull in the title from the mp3 tags.
             config.tags['title'] = tags['title'][0]
+            config.tags['comments'] = tags['title'][0] + comment_suffix
 
             encoder.png_poster(config)
             encoder.mkv_encode(config, True)
             os.remove(config.png_poster_file)
 
-        # TODO: Check if the file is already uploaded.
-        #uploader.youtube_upload(config)
+        if not os.path.isfile(config.mkv_file + '.upload')
+            uploader.youtube_upload(config)
+            touch(config.mkv_file + '.upload')
 
 if __name__ == '__main__':
     main()

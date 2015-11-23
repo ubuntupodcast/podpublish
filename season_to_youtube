@@ -35,7 +35,7 @@ def touch(fname, times=None):
         os.utime(fname, times)
 
 def main():
-    AUDIO_FORMAT='ogg'
+    AUDIO_FORMAT='mp3'
 
     config = configuration.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
     audio_files = get_files(config.audio_in, AUDIO_FORMAT)
@@ -47,24 +47,24 @@ def main():
         if '_low' in audio_file:
             continue
 
-        # Pull in the episode from the mp3 filename.
+        # Pull in the episode from the audio filename.
         config.episode = re.findall(r"(?:e|x|episode|\n)(\d{2})", audio_file, re.I)[0]
         config.update_filename()
 
+        # Update the configuration to point at the current audio file.
+        config.audio_in = audio_file
+        tags = get_tags(audio_file, AUDIO_FORMAT)
+
+        # Pull in the title from the audio tags.
+        config.tags['title'] = tags['title'][0]
+        config.tags['comments'] = tags['title'][0] + comment_suffix
+
         if not os.path.isfile(config.mkv_file):
-            # Update the configuration to point at the current audio file.
-            config.audio_in = audio_file
-            tags = get_tags(audio_file, AUDIO_FORMAT)
-
-            # Pull in the title from the mp3 tags.
-            config.tags['title'] = tags['title'][0]
-            config.tags['comments'] = tags['title'][0] + comment_suffix
-
             encoder.png_poster(config)
-            encoder.mkv_encode(config, True)
+            encoder.mkv_encode(config)
             os.remove(config.png_poster_file)
 
-        if not os.path.isfile(config.mkv_file + '.upload')
+        if not os.path.isfile(config.mkv_file + '.upload'):
             uploader.youtube_upload(config)
             touch(config.mkv_file + '.upload')
 

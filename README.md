@@ -34,17 +34,19 @@ will soon be made into a generic tool useful to other podcasters.
 To encode an audio file to `.mp3`, `.ogg` and `.mkv` (for uploading to
 YouTube, do the following.
 
-The `skip` options will bypass encoding is set to `True`.
+The `skip` options, in the `.ini` file, will bypass encoding if set to
+`True`.
 
   * Edit the example `podcast.ini`.
-  * Execute `./encode_podcast.py`.
+  * Execute `./encode_podcast podcast.ini`.
 
 ### Publishing a single podcast
 
-The `skip` options will bypass publishing if set to `True`.
+The `skip` options, in the `.ini` file, will bypass publishing if set to
+`True`.
 
   * Edit the example `podcast.ini`.
-  * Execute `./publish_podcast.py`.
+  * Execute `./publish_podcast.py podcast.ini`.
 
 ### Encoding a season of podcasts
 
@@ -52,7 +54,7 @@ To encode a season of audio files, from existing `.mp3` or `.ogg` files
 , encode them to `.mkv` and upload them to YouTube, do the following.
 
   * Edit the example `season-to-youtube.ini`.
-  * Execute `./season-to-youtube`.
+  * Execute `./season-to-youtube season-to-youtube.ini`.
 
 The season encoder/uploader expects derive the each Episode number from
 the source audio filename and each episode Title from tags embedded in

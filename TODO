@@ -1,5 +1,4 @@
 ## TODO
 
-  * Use argparse to take a single .ini file as an argument.
-  * Validate the ConfigObj configuration.
   * Publish to Wordpress.
+  * Validate the ConfigObj configuration.

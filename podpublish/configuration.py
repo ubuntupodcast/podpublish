@@ -45,7 +45,9 @@ class Configuration(object):
 
         # If backdrop is a directory, grab a random file from it.
         if os.path.isdir(self.config['artwork']['backdrop']):
-            self.config['artwork']['backdrop'] = random.choice(os.listdir(self.config['artwork']['backdrop']))
+            print("Backdrop is a directory, taking a lucky dip...")
+            self.config['artwork']['backdrop'] = os.path.join(self.config['artwork']['backdrop'], random.choice(os.listdir(self.config['artwork']['backdrop'])))
+            print("The winner is: " + self.config['artwork']['backdrop'])
 
         # Check that required files exist.
         check_exists(self.config['artwork']['backdrop'])

@@ -17,7 +17,7 @@ def main():
     parser.add_argument('filename', type=argparse.FileType('r'), help="Podcast configuration file.")
     args = parser.parse_args()
 
-    config = configuration.Configuration('podcast.ini')
+    config = configuration.Configuration(args.filename)
 
     if not config.skip_mp3 and not config.skip_sftp:
         if os.path_isfile(config.mp3_file):

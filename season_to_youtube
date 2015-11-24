@@ -44,7 +44,7 @@ def main():
 
     AUDIO_FORMAT='mp3'
 
-    config = configuration.Configuration('/home/martin/Dropbox/UbuntuPodcast/YouTube/s01.ini')
+    config = configuration.Configuration(args.filename)
     audio_files = get_files(config.audio_in, AUDIO_FORMAT)
 
     comment_suffix = config.tags['comments']

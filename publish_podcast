@@ -33,6 +33,9 @@ def main():
             print('ERROR! ' + config.ogg_file + ' is missing. Abort.')
             sys.exit(1)
 
+    if not config.skip_wordpress:
+        uploader.wordpress_post(config)
+
     if not config.skip_youtube:
         if os.path_isfile(config.mkv_file):
             uploader.youtube_upload(config)

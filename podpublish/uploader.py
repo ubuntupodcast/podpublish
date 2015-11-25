@@ -5,8 +5,14 @@
 # See the file "LICENSE" for the full license governing this code.
 
 import optparse
+import os
 import pysftp
 import sys
+from wordpress_xmlrpc import WordPressPost
+from wordpress_xmlrpc import Client, WordPressPost
+from wordpress_xmlrpc.methods.posts import NewPost, EditPost
+from wordpress_xmlrpc.compat import xmlrpc_client
+from wordpress_xmlrpc.methods import media, posts
 from youtube_upload import main as yt
 
 def _sftp_put_file(config, cinfo, file_in):
@@ -64,6 +70,41 @@ def sftp_upload(config, file_in):
     else:
         print('Upload completed.')
 
+def wordpress_post(config):
+    print("Connecting to: " + config.wordpress['xmlrpc'])
+    wp = Client(config.wordpress['xmlrpc'],
+                config.wordpress['username'],
+                config.wordpress['password'])
+
+    if config.attach_header:
+        print("Uploading header image...")
+        # Upload header image
+        data = {
+            'name': os.path.basename(config.png_header_file),
+            'type': 'image/png',
+        }
+
+        # Read the image and let the XMLRPC library encode it to base64
+        with open(config.png_header_file, 'rb') as img:
+            data['bits'] = xmlrpc_client.Binary(img.read())
+
+        response = wp.call(media.UploadFile(data))
+        attachment_id = response['id']
+
+    print("Posting blog...")
+    post = WordPressPost()
+    post.title = config.wordpress['title']
+    post.content = config.wordpress['content']
+    post.post_format = config.wordpress['post_format']
+    post.post_status = config.wordpress['post_status']
+    if config.attach_header:
+        post.thumbnail = attachment_id
+    post.terms_names = {
+        'post_tag': [config.wordpress['tags']],
+        'category': [config.wordpress['category']]
+    }
+    post.id = wp.call(NewPost(post))
+
 def youtube_upload(config):
     print("Uploading " + config.mkv_file + ' to YouTube')
 
@@ -88,7 +129,7 @@ def youtube_upload(config):
 
     arguments = ["--title=" + config.tags['album'] + " " + config.tags['title'],
                  "--category=" + config.youtube['category'],
-                 "--description=" + config.tags['comments'],
+                 "--description=" + config.youtube['description'],
                  "--privacy=" + config.youtube['privacy'],
                  "--playlist=" + config.tags['album'],
                  "--client-secrets=" + config.youtube['client_secrets'],

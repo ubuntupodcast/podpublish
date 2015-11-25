@@ -1,6 +1,8 @@
 configobj
 ffmpy
 google-api-python-client
+html2text
+markdown
 mutagen
 oauth2client
 pillow
@@ -8,4 +10,5 @@ progressbar33
 pydub
 pysftp
 python-resize-image
+python-wordpress-xmlrpc
 https://github.com/tokland/youtube-upload/archive/master.zip

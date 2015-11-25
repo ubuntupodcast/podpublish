@@ -1,6 +1,7 @@
 ## TODO
 
-  * Publish to Wordpress support.
+  * Add support for uploading audio to Wordpress or setting audio URLs for Powerpress.
   * Add `--dry-run` argument to `publish_podcast`.
+  * Add Discourse support using [pydiscourse](https://github.com/tindie/pydiscourse)
   * Use `validate` and a ConfigSpec to validate the `.ini`. This may not
   play nicely with string interpolation.

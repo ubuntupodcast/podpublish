@@ -65,6 +65,7 @@ def main():
         # Pull in the title from the audio tags.
         config.tags['title'] = tags['title'][0]
         config.tags['comments'] = tags['title'][0] + comment_suffix
+        config.youtube['description'] = tags['title'][0] + comment_suffix
 
         if not os.path.isfile(config.mkv_file):
             encoder.png_poster(config)

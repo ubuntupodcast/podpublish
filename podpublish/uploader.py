@@ -4,10 +4,13 @@
 # http://www.ubuntupodcast.org
 # See the file "LICENSE" for the full license governing this code.
 
+import datetime
 import optparse
 import os
 import pysftp
 import sys
+from mutagen.mp3 import MP3
+from mutagen.oggvorbis import OggVorbis
 from wordpress_xmlrpc import WordPressPost
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, EditPost
@@ -70,6 +73,31 @@ def sftp_upload(config, file_in):
     else:
         print('Upload completed.')
 
+def get_audio_size_and_duration(config):
+    if not config.skip_mp3:
+        mp3 = MP3(config.mp3_file)
+        mp3_seconds = int(mp3.info.length)
+        mp3_duration = str(datetime.timedelta(seconds=mp3_seconds))
+        config.mp3['size'] = os.path.getsize(config.mp3_file)
+        config.mp3['duration'] = mp3_duration
+        print('MP3 size: ' + str(config.mp3['size']))
+        print('MP3 duration: ' + str(config.mp3['duration']))
+        # Hack
+        if config.basename == 'ubuntupodcast':
+            print('MP3 URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.mp3_file)
+
+    if not config.skip_ogg:
+        ogg = OggVorbis(config.ogg_file)
+        ogg_seconds = int(ogg.info.length)
+        ogg_duration = str(datetime.timedelta(seconds=ogg_seconds))
+        config.ogg['size'] = os.path.getsize(config.ogg_file)
+        config.ogg['duration'] = ogg_duration
+        print('Ogg size: ' + str(config.ogg['size']))
+        print('Ogg duration: ' + str(config.ogg['duration']))
+        # Hack
+        if config.basename == 'ubuntupodcast':
+            print('MP3 URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.ogg_file)
+
 def wordpress_post(config):
     print("Connecting to: " + config.wordpress['xmlrpc'])
     wp = Client(config.wordpress['xmlrpc'],
@@ -104,6 +132,9 @@ def wordpress_post(config):
         'category': [config.wordpress['category']]
     }
     post.id = wp.call(NewPost(post))
+
+    if config.wordpress['podcast_plugin'] == 'Powerpress':
+        get_audio_size_and_duration(config)
 
 def youtube_upload(config):
     print("Uploading " + config.mkv_file + ' to YouTube')

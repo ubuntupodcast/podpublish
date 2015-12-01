@@ -17,7 +17,7 @@ assume you're running Ubuntu.
 
 ### Install ffmpeg and pip
 
-    sudo apt-get install ffmpeg libavcodec-extra python3-pip
+    sudo apt-get install ffmpeg git libavcodec-extra python3-dev python3-pip
 
 ### Install podpublish
 

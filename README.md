@@ -1,9 +1,8 @@
 # Introduction
 
 A tool for encoding and publishing podcast content and assets. Inspired
-by:
-
-  * https://github.com/stuartlangridge/bv-publish
+by [bv-publish](https://github.com/stuartlangridge/bv-publish) and the
+talk [Stuart Langridge gave at Oggcamp 2015](https://www.youtube.com/watch?v=IG6-YdBbwE8).
 
 Project created by [Ubuntu Podcast](http://www.ubuntupodcast.org) and
 released under the [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)

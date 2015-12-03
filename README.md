@@ -16,7 +16,12 @@ assume you're running Ubuntu.
 
 ### Install ffmpeg and pip
 
-    sudo apt-get install ffmpeg libavcodec-extra python3-pip
+    sudo apt-get install ffmpeg git libavcodec-extra python3-dev python3-pip
+
+### Install Pillow build dependencies
+
+    sudo apt-get install liblcms2-dev libfreetype6-dev libjpeg8-dev \
+    libopenjp2-7-dev libtiff5-dev libwebp-dev zlib1g-dev
 
 ### Install podpublish
 

@@ -141,6 +141,7 @@ class Configuration(object):
 
         # Wordpress will accept the Markdown directly.
         self.wordpress['content'] = self.config['show_notes']
+        #print(wp_text)
 
         # Remove some Wordpress shortcodes
         markdown_content = self.config['show_notes']
@@ -161,16 +162,17 @@ class Configuration(object):
             head, sep, tail = text_content.partition(self.config['break_point'])
             text_content = head + sep
 
+        # Clean up some text conversion weirdness.
+        text_content = text_content.replace('\-', '-')
+
         # If a website is in the tags include details so the YouTube
         # description inludes a link.
         if self.tags['website']:
             text_content = text_content + "\n\nFind more shows, or get in touch, on our website:\n\n  * " + self.tags['website']
 
-        #print(text_content)
-
         self.tags['comments'] = text_content
         self.youtube['description'] = text_content
-
+        #print(text_content)
 
     def update_filename(self):
         self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode

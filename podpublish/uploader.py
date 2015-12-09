@@ -35,7 +35,7 @@ def sftp_upload(config, file_in):
 
     if not config.sftp['remote_directory'].endswith('/'):
         config.sftp['remote_directory'] += '/'
-        print('Added trailing / to:' + config.sftp['remote_directory'])
+        print('Added trailing / to: ' + config.sftp['remote_directory'])
 
     if (config.sftp['username'] and config.sftp['password']) and not config.sftp['private_key']:
         print("Attempting to authenticate with username and password.")
@@ -96,7 +96,7 @@ def get_audio_size_and_duration(config):
         print('Ogg duration: ' + str(config.ogg['duration']))
         # Hack
         if config.basename == 'ubuntupodcast':
-            print('MP3 URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.ogg_file)
+            print('Ogg URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.ogg_file)
 
 def wordpress_post(config):
     print("Connecting to: " + config.wordpress['xmlrpc'])

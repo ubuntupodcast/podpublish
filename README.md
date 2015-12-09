@@ -25,8 +25,22 @@ assume you're running Ubuntu.
 
 ### Install podpublish
 
+#### System wide
+
     git clone git@bitbucket.org:flexiondotorg/podpublish.git
     sudo pip3 install -r podpublish/requirements.txt
+
+#### In a virtualenv
+
+These are the steps for install on Ubuntu 15.10, you may need to change
+`3.5` to `3.4` for earlier Ubuntu versions.
+
+    sudo apt-get install python-setuptools python-virtualenv python-pip virtualenvwrapper
+    sudo apt-get install libpython3.5 python3.5 python3.5-dev python3.5-minimal
+    mkdir ~/Snakepit
+    virtualenv -p /usr/bin/python3.5 ~/Snakepit/podpublish
+    source ~/Snakepit/podpublish/bin/activate
+    pip3 install -r podpublish/requirements.txt
 
 ## Usage
 
@@ -137,4 +151,4 @@ Set the `~/.ssh` file/directory permissions.
 
 Source code is available from BitBucket.
 
-  * https://bitbucket.org/flexiodotorg/podpublish
+  * https://bitbucket.org/flexiondotorg/podpublish

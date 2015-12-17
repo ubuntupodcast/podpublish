@@ -158,7 +158,11 @@ def youtube_upload(config):
     #Additional options
     parser.add_option('', '--open-link', dest='open_link', action='store_true')
 
-    arguments = ["--title=" + config.tags['album'] + " " + config.tags['title'],
+    # YouTube has a 100 character title limit
+    full_title = config.tags['album'] + ' ' + config.tags['title']
+    youtube_title = full_title[:99]
+
+    arguments = ["--title=" + youtube_title,
                  "--category=" + config.youtube['category'],
                  "--description=" + config.youtube['description'],
                  "--privacy=" + config.youtube['privacy'],

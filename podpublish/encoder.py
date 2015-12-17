@@ -117,9 +117,6 @@ def png_header(config):
             cover.save(config.png_header_file, 'png')
 
 def png_poster(config):
-    # Poster images for use in YouTube videos are hardcoded to 854x480.
-    # Let's just agree that Stuart Langridge and Martin Wimpress did
-    # their homework and this is how it is going to be ;-)
     print("Creating " + config.png_poster_file)
     artist = config.tags['artist']
     title = config.tags['album'] + ' ' + config.tags['title']

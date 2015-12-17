@@ -167,7 +167,7 @@ def mkv_encode(config, copy_audio = False):
     if copy_audio:
         outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a copy -shortest')])
     else:
-        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a aac -strict experimental -b:a 240k -shortest')])
+        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -preset fast -tune stillimage -c:a aac -strict experimental -b:a 160k -shortest')])
 
     ff = FF(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd_str)

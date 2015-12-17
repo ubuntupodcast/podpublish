@@ -18,6 +18,10 @@ assume you're running Ubuntu.
 
     sudo apt-get install ffmpeg git libavcodec-extra python3-dev python3-pip
 
+There is also a good quality statically compiled `ffmpeg` available from [John Van Sickle](http://johnvansickle.com/)
+
+  * http://johnvansickle.com/ffmpeg/
+
 ### Install Pillow build dependencies
 
     sudo apt-get install liblcms2-dev libfreetype6-dev libjpeg8-dev \

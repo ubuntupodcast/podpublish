@@ -6,7 +6,7 @@ markdown
 mutagen
 oauth2client
 pillow
-progressbar33
+progressbar2
 pydub
 pysftp
 python-resize-image

@@ -125,6 +125,7 @@ def wordpress_post(config):
     post.content = config.wordpress['content']
     post.post_format = config.wordpress['post_format']
     post.post_status = config.wordpress['post_status']
+    post.comment_status = config.wordpress['comment_status']
     if config.attach_header:
         post.thumbnail = attachment_id
     post.terms_names = {

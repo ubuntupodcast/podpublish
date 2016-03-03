@@ -26,9 +26,10 @@ def main():
         encoder.ogg_tag(config)
         encoder.ogg_coverart(config)
 
+    encoder.png_header(config)
+    encoder.png_poster(config)
+
     if not config.skip_youtube:
-        encoder.png_header(config)
-        encoder.png_poster(config)
         encoder.mkv_encode(config)
 
 if __name__ == '__main__':

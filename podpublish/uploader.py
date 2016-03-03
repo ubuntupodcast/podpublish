@@ -125,6 +125,7 @@ def wordpress_post(config):
     post.content = config.wordpress['content']
     post.post_format = config.wordpress['post_format']
     post.post_status = config.wordpress['post_status']
+    post.comment_status = config.wordpress['comment_status']
     if config.attach_header:
         post.thumbnail = attachment_id
     post.terms_names = {
@@ -148,6 +149,9 @@ def youtube_upload(config):
     parser.add_option('', '--privacy', dest='privacy', metavar="STRING", default="public")
     parser.add_option('', '--publish-at', dest='publish_at', metavar="datetime", default=None)
     parser.add_option('', '--location', dest='location', type="string", default=None, metavar="latitude=VAL,longitude=VAL[,altitude=VAL]")
+    parser.add_option('', '--recording-date', dest='recording_date', metavar="datetime", default=None)
+    parser.add_option('', '--default-language', dest='default_language', type="string", default=None, metavar="string")
+    parser.add_option('', '--default-audio-language', dest='default_audio_language', type="string", default=None, metavar="string")
     parser.add_option('', '--thumbnail', dest='thumb', type="string")
     parser.add_option('', '--playlist', dest='playlist', type="string")
     parser.add_option('', '--title-template', dest='title_template', type="string", default="{title} [{n}/{total}]", metavar="STRING")

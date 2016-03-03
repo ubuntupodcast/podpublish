@@ -42,8 +42,24 @@ These are the steps for install on Ubuntu 15.10, you may need to change
     sudo apt-get install python-setuptools python-virtualenv python-pip virtualenvwrapper
     sudo apt-get install libpython3.5 python3.5 python3.5-dev python3.5-minimal
     mkdir ~/Snakepit
+
+Using `virtualenv`:
+
     virtualenv -p /usr/bin/python3.5 ~/Snakepit/podpublish
     source ~/Snakepit/podpublish/bin/activate
+
+Or using `mkvirtualenv`:
+
+    mkvirtualenv -p /usr/bin/python3.5 podpublish
+    workon podpublish
+
+Or using `virtualfish`:
+
+    vf new -p /usr/bin/python3.5 podpublish
+    workon podpublish
+
+Install podpublish.
+
     pip3 install -r podpublish/requirements.txt
 
 ## Usage
@@ -68,7 +84,7 @@ The `skip` options, in the `.ini` file, will bypass publishing if set to
 `True`.
 
   * Edit the example `podcast.ini`.
-  * Execute `./publish_podcast.py podcast.ini`.
+  * Execute `./publish_podcast podcast.ini`.
 
 ### Encoding a season of podcasts
 

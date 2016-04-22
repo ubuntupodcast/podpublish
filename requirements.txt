@@ -11,4 +11,3 @@ pydub
 pysftp
 python-resize-image
 python-wordpress-xmlrpc
-https://github.com/tokland/youtube-upload/archive/master.zip

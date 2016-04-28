@@ -24,9 +24,6 @@ class Configuration(object):
         # TODO: Use a ConfigSpec to validate the ini file.
         self.config = configobj.ConfigObj(ini_file)
 
-        if self.config['featured_image'].startswith('~'):
-            self.config['featured_image'] = os.path.expanduser(self.config['featured_image'])
-
         # expand any relative file paths.
         if self.config['artwork']['backdrop'].startswith('~'):
             self.config['artwork']['backdrop'] = os.path.expanduser(self.config['artwork']['backdrop'])

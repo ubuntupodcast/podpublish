@@ -12,7 +12,7 @@ license.
 
 Eventually this will be added to PyPi (or something) for simplier
 installation. But for now the following steps are required, which
-assume you're running Ubuntu.
+requires you're running Ubuntu 16.04 or newer.
 
 ### Install ffmpeg and pip
 
@@ -27,6 +27,10 @@ There is also a good quality statically compiled `ffmpeg` available from [John V
     sudo apt-get install liblcms2-dev libfreetype6-dev libjpeg8-dev \
     libopenjp2-7-dev libtiff5-dev libwebp-dev zlib1g-dev
 
+### Install crypto build dependecies
+
+    sudo apt install libffi-dev libssl-dev
+
 ### Install podpublish
 
 #### System wide
@@ -36,8 +40,7 @@ There is also a good quality statically compiled `ffmpeg` available from [John V
 
 #### In a virtualenv
 
-These are the steps for install on Ubuntu 15.10, you may need to change
-`3.5` to `3.4` for earlier Ubuntu versions.
+These are the steps for installing on Ubuntu 16.04.
 
     sudo apt-get install python-setuptools python-virtualenv python-pip virtualenvwrapper
     sudo apt-get install libpython3.5 python3.5 python3.5-dev python3.5-minimal

@@ -1,5 +1,5 @@
 configobj
-ffmpy
+ffmpy==0.1.0
 google-api-python-client
 html2text
 markdown

@@ -5,9 +5,9 @@
 # See the file "LICENSE" for the full license governing this code.
 
 import base64
+import ffmpy
 import sys
 from collections import OrderedDict
-from ffmpy import FF
 from mutagen.easyid3 import EasyID3, EasyID3KeyError
 from mutagen.flac import Picture
 from mutagen.mp3 import MP3
@@ -165,7 +165,7 @@ def mkv_encode(config, copy_audio = False):
     else:
         outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -crf 21 -bf 2 -flags +cgop -tune stillimage -c:a aac -r:a 48000 -strict experimental -b:a 384k -shortest -movflags faststart')])
 
-    ff = FF(global_options=global_options, inputs=inputs, outputs=outputs)
+    ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd_str)
     ff.run()
 

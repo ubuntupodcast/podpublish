@@ -175,3 +175,33 @@ Set the `~/.ssh` file/directory permissions.
 Source code is available from BitBucket.
 
   * https://bitbucket.org/flexiondotorg/podpublish
+
+# Snap
+
+## Ubuntu Podcast Setup
+
+The Snap `home` interface munges `${HOME}` and my use cae for podpublish is to 
+use configuration files that contain relative paths to podcast assets, such as 
+audio files and artwork.
+
+The Ubuntu Podcast team use Dropbox to sync all the show assets, therefore the 
+Dropbox directory needs to be symlinked into the podpublish snap data 
+directory.
+
+Run the following, which will create the data directory.
+
+    /snap/bin/podpublish.encode-podcast --version
+
+Now symlink Dropbox.
+
+    ln -s ~/Dropbox ~/snap/podpublish/x{*}/
+
+## Use
+
+To encode a podcast.
+
+    /snap/bin/podpublish.encode_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+
+To upload a podcast.
+ 
+    /snap/bin/podpublish.publish_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini

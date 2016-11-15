@@ -4,16 +4,19 @@
 # http://www.ubuntupodcast.org
 # See the file "LICENSE" for the full license governing this code.
 
+import sys
 import podpublish as pkg
 from setuptools import setup, find_packages
 
 
 def get_requirements(fname):
+    requirements = []
+
     try:
         with open(fname, 'r') as fh:
             requirements = [l.strip() for l in fh]
     except:
-        requirements = []
+        pass
 
     return requirements
 
@@ -29,11 +32,21 @@ def get_extras(fname):
 
     return extras
 
-
-install_requires = get_requirements('requirements.txt')
-setup_requires = get_requirements('requirements-setup.txt')
-tests_require = get_requirements('requirements-tests.txt')
-extras_require = get_extras('requirements-extras.txt')
+# Work-around for building as Snap in Launchpad.
+# Internet access is only available in the pull step. If your build step for
+# instance tries to hit the internet, it'll fail. Refactor your snapcraft.yaml
+# if necessary.
+# TODO: Detect snapcraft is doing the build
+if 'build' in str(sys.argv[1]):
+    install_requires = []
+    setup_requires = []
+    tests_require = []
+    extras_require = {}
+else:
+    install_requires = get_requirements('requirements.txt')
+    setup_requires = get_requirements('requirements-setup.txt')
+    tests_require = get_requirements('requirements-tests.txt')
+    extras_require = get_extras('requirements-extras.txt')
 
 setup(
     name=pkg.__packagename__,
@@ -56,7 +69,7 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     extras_require=extras_require,
-    #setup_requires=setup_requires,
+    setup_requires=setup_requires,
     tests_require=tests_require,
     entry_points={
         'console_scripts': [
@@ -67,7 +80,7 @@ setup(
         ],
         'gui_scripts' : [],
     },
-    #test_suite='nose.collector',
+    test_suite='nose.collector',
 )
 
 ################################################################################

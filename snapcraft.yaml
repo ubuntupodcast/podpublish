@@ -6,6 +6,9 @@ description: |
  bv-publish and the talk Stuart Langridge gave at Oggcamp 2015. Project created
  by Ubuntu Podcast and released under the GPLv2 license.
 
+confinement: devmode
+grade: devel
+
 apps:
   encode-podcast:
     command: usr/bin/python3 $SNAP/usr/bin/encode-podcast
@@ -22,7 +25,7 @@ apps:
 
 parts:
   podpublish:
-    plugin: python3
+    plugin: python
     requirements: requirements.txt
     source: https://bitbucket.org/flexiondotorg/podpublish.git
     source-type: git
@@ -57,7 +60,7 @@ parts:
       - -usr/share/X11/XErrorDB
 
   ffmpeg:
-    source: http://ffmpeg.org/releases/ffmpeg-3.1.1.tar.bz2
+    source: http://ffmpeg.org/releases/ffmpeg-3.2.tar.bz2
     plugin: autotools
     configflags: [--enable-gpl, --enable-libass, --enable-libfreetype, --enable-libmp3lame, --enable-libopus, --enable-libtheora, --enable-libvorbis, --enable-libvpx, --enable-libx264, --enable-libx265, --enable-nonfree]
     build-packages:

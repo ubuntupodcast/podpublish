@@ -32,10 +32,10 @@ def get_extras(fname):
 
     return extras
 
-# Work-around for building as Snap in Launchpad.
-# Internet access is only available in the pull step. If your build step for
-# instance tries to hit the internet, it'll fail. Refactor your snapcraft.yaml
-# if necessary.
+# Work-around snap builds failing in Launchpad.
+# NOTE! Internet access is only available in the pull step. If your build
+# step tries to hit the internet, it'll fail. 
+
 # TODO: Detect snapcraft is doing the build
 if 'build' in str(sys.argv[1]):
     install_requires = []
@@ -67,10 +67,10 @@ setup(
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     zip_safe=False,
-    install_requires=install_requires,
-    extras_require=extras_require,
-    setup_requires=setup_requires,
-    tests_require=tests_require,
+    #install_requires=install_requires,
+    #extras_require=extras_require,
+    #setup_requires=setup_requires,
+    #tests_require=tests_require,
     entry_points={
         'console_scripts': [
             'encode-podcast = podpublish.encode_podcast:main',

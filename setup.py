@@ -56,7 +56,7 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     extras_require=extras_require,
-    setup_requires=setup_requires,
+    #setup_requires=setup_requires,
     tests_require=tests_require,
     entry_points={
         'console_scripts': [
@@ -67,7 +67,7 @@ setup(
         ],
         'gui_scripts' : [],
     },
-    test_suite='nose.collector',
+    #test_suite='nose.collector',
 )
 
 ################################################################################

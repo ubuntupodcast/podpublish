@@ -62,7 +62,6 @@ pylint.log
 *.tmp
 
 # Project specific ignores:
-*.png
 *.mp3
 *.ogg
 *.mkv

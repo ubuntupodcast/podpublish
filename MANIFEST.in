@@ -16,6 +16,7 @@ exclude nosetests.xml
 exclude podcast.ini
 exclude season_to_youtube.ini
 exclude snapcraft.yaml
+exclude icons
 exclude parts
 exclude prime
 exclude stage

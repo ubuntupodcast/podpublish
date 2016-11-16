@@ -4,7 +4,6 @@
 # http://www.ubuntupodcast.org
 # See the file "LICENSE" for the full license governing this code.
 
-import sys
 import podpublish as pkg
 from setuptools import setup, find_packages
 
@@ -32,22 +31,10 @@ def get_extras(fname):
 
     return extras
 
-# Work-around snap builds failing in Launchpad.
-# NOTE! Internet access is only available in the pull step. If your build
-# step tries to hit the internet, it'll fail. 
-
-# TODO: Detect snapcraft is doing the build
-print('This build step is: ' + sys.argv[1])
-if 'bdist' in str(sys.argv[1]):
-    install_requires = []
-    setup_requires = []
-    tests_require = []
-    extras_require = {}
-else:
-    install_requires = get_requirements('requirements.txt')
-    setup_requires = get_requirements('requirements-setup.txt')
-    tests_require = get_requirements('requirements-tests.txt')
-    extras_require = get_extras('requirements-extras.txt')
+install_requires = get_requirements('requirements.txt')
+setup_requires = get_requirements('requirements-setup.txt')
+tests_require = get_requirements('requirements-tests.txt')
+extras_require = get_extras('requirements-extras.txt')
 
 setup(
     name=pkg.__packagename__,

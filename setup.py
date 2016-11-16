@@ -31,10 +31,10 @@ def get_extras(fname):
 
     return extras
 
-install_requires = get_requirements('requirements.txt')
-setup_requires = get_requirements('requirements-setup.txt')
-tests_require = get_requirements('requirements-tests.txt')
-extras_require = get_extras('requirements-extras.txt')
+#install_requires = get_requirements('requirements.txt')
+#setup_requires = get_requirements('requirements-setup.txt')
+#tests_require = get_requirements('requirements-tests.txt')
+#extras_require = get_extras('requirements-extras.txt')
 
 setup(
     name=pkg.__packagename__,
@@ -55,10 +55,10 @@ setup(
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     zip_safe=False,
-    install_requires=install_requires,
-    extras_require=extras_require,
-    setup_requires=setup_requires,
-    tests_require=tests_require,
+    #install_requires=install_requires,
+    #extras_require=extras_require,
+    #setup_requires=setup_requires,
+    #tests_require=tests_require,
     entry_points={
         'console_scripts': [
             'encode-podcast = podpublish.encode_podcast:main',
@@ -68,7 +68,7 @@ setup(
         ],
         'gui_scripts' : [],
     },
-    test_suite='nose.collector',
+    #test_suite='nose.collector',
 )
 
 ################################################################################

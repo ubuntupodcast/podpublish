@@ -64,27 +64,27 @@ parts:
     plugin: autotools
     configflags: [--enable-gpl, --enable-libass, --enable-libfreetype, --enable-libmp3lame, --enable-libopus, --enable-libtheora, --enable-libvorbis, --enable-libvpx, --enable-libx264, --enable-libx265, --enable-nonfree]
     build-packages:
-      - yasm
-      - libtool
-      - cmake
-      - pkg-config
       - build-essential
+      - cmake
+      - libtool
+      - pkg-config
       - libass-dev
       - libfreetype6-dev
+      - libmp3lame-dev
+      - libopus-dev
       - libsdl1.2-dev
       - libtheora-dev
       - libva-dev
       - libvdpau-dev
       - libvorbis-dev
+      - libvpx-dev
+      - libx264-dev
+      - libx265-dev
       - libxcb1-dev
       - libxcb-shm0-dev
       - libxcb-xfixes0-dev
       - texinfo
+      - yasm
       - zlib1g-dev
-      - libx264-dev
-      - libmp3lame-dev
-      - libopus-dev
-      - libx265-dev
-      - libvpx-dev
     organize:
       usr/local/bin: usr/bin

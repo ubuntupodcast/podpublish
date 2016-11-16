@@ -37,7 +37,7 @@ def get_extras(fname):
 # step tries to hit the internet, it'll fail. 
 
 # TODO: Detect snapcraft is doing the build
-if 'build' in str(sys.argv[1]):
+if 'bdist' in str(sys.argv[1]):
     install_requires = []
     setup_requires = []
     tests_require = []
@@ -67,10 +67,10 @@ setup(
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     zip_safe=False,
-    #install_requires=install_requires,
-    #extras_require=extras_require,
-    #setup_requires=setup_requires,
-    #tests_require=tests_require,
+    install_requires=install_requires,
+    extras_require=extras_require,
+    setup_requires=setup_requires,
+    tests_require=tests_require,
     entry_points={
         'console_scripts': [
             'encode-podcast = podpublish.encode_podcast:main',

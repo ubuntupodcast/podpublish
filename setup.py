@@ -37,6 +37,7 @@ def get_extras(fname):
 # step tries to hit the internet, it'll fail. 
 
 # TODO: Detect snapcraft is doing the build
+print('This build step is: ' + sys.argv[1])
 if 'bdist' in str(sys.argv[1]):
     install_requires = []
     setup_requires = []

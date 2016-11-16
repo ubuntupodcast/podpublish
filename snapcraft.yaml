@@ -67,7 +67,7 @@ parts:
   ffmpeg:
     source: http://ffmpeg.org/releases/ffmpeg-3.2.tar.bz2
     plugin: autotools
-    configflags: [--enable-gpl, --enable-libass, --enable-libfreetype, --enable-libmp3lame, --enable-libopus, --enable-libtheora, --enable-libvorbis, --enable-libvpx, --enable-libx264, --enable-libx265, --enable-nonfree]
+    configflags: [--enable-gpl, --enable-libass, --enable-libfreetype, --enable-libmp3lame, --enable-libopus, --enable-libtheora, --enable-libvorbis, --enable-libvpx, --enable-libx264, --enable-libx265, --enable-nonfree, --enable-shared, --disable-static, --disable-doc, --disable-ffserver, --disable-ffplay]
     build-packages:
       - build-essential
       - cmake

@@ -70,6 +70,10 @@ parts:
       - -usr/bin/pydoc3*
       - -usr/bin/pygettext3*
       - -usr/lib/gcc
+      - -usr/lib/python*/idlelib
+      - -usr/lib/python*/lib2to3
+      - -usr/lib/python*/tkinter
+      - -usr/lib/python*/venv
       - -usr/lib/valgrind
       - -usr/sbin
       - -usr/share/applications
@@ -98,6 +102,7 @@ parts:
       - --enable-libmp3lame
       - --enable-libvorbis
       - --enable-libx264
+      - --disable-avdevice
       - --disable-doc
       - --disable-ffplay
       - --disable-ffprobe

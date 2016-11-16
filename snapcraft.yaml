@@ -51,13 +51,17 @@ parts:
       - libtiff5
       - zlib1g
     snap:
+      - -usr/share/applications
       - -usr/share/bug
+      - -usr/share/debhelper
+      - -usr/share/dh-python
       - -usr/share/doc
       - -usr/share/doc-base
       - -usr/share/fonts
       - -usr/share/include
       - -usr/share/man
       - -usr/share/X11/XErrorDB
+      - -share/man
 
   ffmpeg:
     source: http://ffmpeg.org/releases/ffmpeg-3.2.tar.bz2
@@ -86,5 +90,12 @@ parts:
       - texinfo
       - yasm
       - zlib1g-dev
+    snap:
+      - -usr/local/include
+      - -usr/local/lib/pkgconfig
+      - -usr/local/share/doc/ffmpeg
+      - -usr/local/share/ffmpeg/examples
+      - -usr/local/share/include
+      - -usr/local/share/man
     organize:
       usr/local/bin: usr/bin

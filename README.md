@@ -180,7 +180,7 @@ Source code is available from BitBucket.
 
 ## Ubuntu Podcast Setup
 
-The Snap `home` interface munges `${HOME}` and my use cae for podpublish is to 
+The Snap `home` interface munges `${HOME}` and my use case for podpublish is to 
 use configuration files that contain relative paths to podcast assets, such as 
 audio files and artwork.
 
@@ -190,7 +190,7 @@ directory.
 
 Run the following, which will create the data directory.
 
-    /snap/bin/podpublish.encode-podcast --version
+    podpublish.encode-podcast --version
 
 Now symlink Dropbox.
 
@@ -200,8 +200,8 @@ Now symlink Dropbox.
 
 To encode a podcast.
 
-    /snap/bin/podpublish.encode_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.encode_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
 
 To upload a podcast.
  
-    /snap/bin/podpublish.publish_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.publish_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini

@@ -13,3 +13,6 @@ exclude coverage.xml
 exclude nosetests.xml
 
 # Project specific
+exclude podcast.ini
+exclude season_to_youtube.ini
+exclude snapcraft.yaml

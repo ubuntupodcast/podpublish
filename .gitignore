@@ -68,6 +68,9 @@ pylint.log
 *.upload
 *.tar.bz2
 *.snap
+parts
+prime
+stage
 
 # Keep empty directories:
 !*/.git*

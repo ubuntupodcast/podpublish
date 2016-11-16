@@ -11,16 +11,16 @@ grade: devel
 
 apps:
   encode-podcast:
-    command: usr/bin/python3 $SNAP/bin/encode-podcast
+    command: env LC_ALL=C.UTF-8 ${SNAP}/usr/bin/python3 $SNAP/bin/encode-podcast
     plugs: [home]
   publish-podcast:
-    command: usr/bin/python3 $SNAP/bin/publish-podcast
+    command: env LC_ALL=C.UTF-8 ${SNAP}/usr/bin/python3 $SNAP/bin/publish-podcast
     plugs: [home, network]
   season-to-youtube:
-    command: usr/bin/python3 $SNAP/bin/season-to-youtube
+    command: env LC_ALL=C.UTF-8 ${SNAP}/usr/bin/python3 $SNAP/bin/season-to-youtube
     plugs: [home]
   youtube-upload:
-    command: usr/bin/python3 $SNAP/bin/youtube-upload
+    command: env LC_ALL=C.UTF-8 ${SNAP}/usr/bin/python3 $SNAP/bin/youtube-upload
     plugs: [home, network]
 
 parts:

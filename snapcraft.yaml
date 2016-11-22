@@ -28,8 +28,7 @@ parts:
   podpublish:
     plugin: python
     requirements: requirements.txt
-    source: https://bitbucket.org/flexiondotorg/podpublish.git
-    source-type: git
+    source: .
     after:
       - ffmpeg
     build-packages:

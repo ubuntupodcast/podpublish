@@ -157,7 +157,7 @@ parts:
       - pkg-config
       - yasm
       - zlib1g-dev
-    snap:
-      - usr/bin/ffmpeg
     organize:
       usr/local/bin: usr/bin
+    snap:
+      - usr/bin/ffmpeg

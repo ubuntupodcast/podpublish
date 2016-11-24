@@ -17,7 +17,7 @@ pyasn1==0.1.9
 pyasn1-modules==0.0.8
 pycparser==2.14
 pydub==0.16.5
-pysftp==0.2.9
+pysftp==0.2.8
 python-resize-image==1.1.3
 python-utils==2.0.0
 python-wordpress-xmlrpc==2.3

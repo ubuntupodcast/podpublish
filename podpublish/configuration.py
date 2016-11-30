@@ -129,6 +129,7 @@ class Configuration(object):
         self.skip_wordpress = self.config.get('wordpress').as_bool('skip')
         self.attach_header = self.config.get('wordpress').as_bool('attach_header')
         self.skip_youtube = self.config.get('youtube').as_bool('skip')
+        self.animated_video = self.config.get('youtube').as_bool('animated')
 
         # If global configuration exists for 'show_notes', cast magic.
         # This implies your show notes are in Markdown.

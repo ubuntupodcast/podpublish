@@ -154,19 +154,35 @@ def png_poster(config):
     poster.save(config.png_poster_file, 'png')
 
 def mkv_encode(config, copy_audio = False):
+
     # Reference for encoding
     #  - https://www.virag.si/2015/06/encoding-videos-for-youtube-with-ffmpeg/
-    global_options='-y -loop 1 -framerate 1 -pix_fmt yuv420p -threads 0'
+
+    # If animated_video is True then overlay an animated waveform, otherwise just use the static poster image and audio.
+    frate = 1
+    loop = 1
+    filter_complex = ''
+    tune_stillimage = ' -tune stillimage '
+    if config.animated_video:
+        print("Encoding animated " + config.mkv_file)
+        frate=24
+        loop=0
+        filter_complex='-filter_complex \"[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=cline:rate=' + str(frate) + ':colors=' + config.font_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '\" '
+        tune_stillimage=' '
+    else:
+        print("Encoding static " + config.mkv_file)
+
+    global_options='-y -v info -loop ' + str(loop) + ' -framerate ' + str(frate) + ' -pix_fmt yuv420p -threads 0'
 
     # Add a 1sec audio delay to prevent loosing the first few audio packets
     inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, '-itsoffset 1.0')])
     if copy_audio:
-        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -crf 21 -bf 2 -flags +cgop -tune stillimage -c:a copy -shortest -movflags faststart')])
+        outputs = OrderedDict([(config.mkv_file, filter_complex + '-c:v libx264 -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + '-c:a copy -shortest -movflags faststart')])
     else:
-        outputs = OrderedDict([(config.mkv_file, '-c:v libx264 -crf 21 -bf 2 -flags +cgop -tune stillimage -c:a aac -r:a 48000 -strict experimental -b:a 384k -shortest -movflags faststart')])
+        outputs = OrderedDict([(config.mkv_file, filter_complex + '-c:v libx264 -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + '-c:a aac -r:a 48000 -strict experimental -b:a 384k -shortest -movflags faststart')])
 
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
-    print(ff.cmd_str)
+    #print(ff.cmd)
     ff.run()
 
 if __name__ == '__main__':

@@ -7,18 +7,6 @@
   * Use `validate` and a ConfigSpec to validate the `.ini`. This may not
   play nicely with string interpolation.
 
-### ffmeg filters
-
-Perhaps adding an option to overlay a sound wave would be nifty.
-
-  *https://trac.ffmpeg.org/wiki/Encode/YouTube
-  * http://video.stackexchange.com/questions/9644/how-do-i-turn-audio-into-video-that-is-show-the-waveforms-in-a-video
-
-The folowing produces a sound wave only but doesn't overlay on the still.
-
-    ffmpeg -i audio.wav -filter_complex showwaves=s=854x480:mode=line -i picture.png -c:v libx264 -preset fast -tune stillimage -c:a aac -strict experimental -b:a 160k -shortest -pix_fmt yuv420p video.mkv
-
-
 ## Building a snap in Launchpad
 
 Currently fails:

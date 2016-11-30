@@ -14,7 +14,7 @@ license.
 
 ## Ubuntu Podcast Setup
 
-The Snap `home` interface munges `${HOME}` and my use case for podpublish is to 
+The snap `home` interface munges `${HOME}` and my use case for podpublish is to 
 use configuration files that contain relative paths to podcast assets, such as 
 audio files and artwork.
 
@@ -26,9 +26,12 @@ Run the following, which will create the data directory.
 
     podpublish.encode-podcast --version
 
-Now symlink Dropbox.
+Now symlink the Dropbox folder containing all the assets and configuration.
 
-    ln -s ~/Dropbox ~/snap/podpublish/x{*}/
+    for DIR in ~/snap/podpublish/*/; do mkdir -- "${DIR}/.ssh"; done
+    for DIR in ~/snap/podpublish/*/; do ln -s ~/.ssh/known_hosts "${DIR}/.ssh/"; done
+    for DIR in ~/snap/podpublish/*/; do mkdir -- "${DIR}/Dropbox"; done
+    for DIR in ~/snap/podpublish/*/; do ln -s ~/Dropbox/UbuntuPodcast "${DIR}/Dropbox/"; done
 
 ## Basic usage
 

@@ -6,7 +6,7 @@ description: |
  bv-publish and the talk Stuart Langridge gave at Oggcamp 2015. Project created
  by Ubuntu Podcast and released under the GPLv2 license.
 
-confinement: devmode
+confinement: strict
 grade: devel
 
 # Export LC_ALL to work-around (LP: #1576411)

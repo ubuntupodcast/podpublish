@@ -40,8 +40,10 @@ class Configuration(object):
         if self.config['youtube']['client_secrets'].startswith('~'):
             self.config['youtube']['client_secrets'] = os.path.expanduser(self.config['youtube']['client_secrets'])
 
-        if self.config['youtube']['credentials_file'].startswith('~'):
-            self.config['youtube']['credentials_file'] = os.path.expanduser(self.config['youtube']['credentials_file'])
+        # The YouTube credentials will not be available for the first upload.
+        if self.config['youtube']['credentials_file']:
+            if self.config['youtube']['credentials_file'].startswith('~'):
+                self.config['youtube']['credentials_file'] = os.path.expanduser(self.config['youtube']['credentials_file'])
 
         if self.config['sftp']['private_key'].startswith('~'):
             self.config['sftp']['private_key'] = os.path.expanduser(self.config['sftp']['private_key'])

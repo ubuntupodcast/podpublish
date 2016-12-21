@@ -62,8 +62,10 @@ class Configuration(object):
             pass
         else:
             check_exists(self.config['episode']['audio_in'])
+
         check_exists(self.config['youtube']['client_secrets'])
-        check_exists(self.config['youtube']['credentials_file'])
+        #check_exists(self.config['youtube']['credentials_file'])
+
         if self.config['sftp']['private_key']:
             check_exists(self.config['sftp']['private_key'])
 

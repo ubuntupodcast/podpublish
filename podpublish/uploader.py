@@ -166,13 +166,25 @@ def youtube_upload(config):
     full_title = config.tags['album'] + ' ' + config.tags['title']
     youtube_title = full_title[:99]
 
-    arguments = ["--title=" + youtube_title,
+
+    if config.youtube['credentials_file']:
+        arguments = ["--title=" + youtube_title,
                  "--category=" + config.youtube['category'],
                  "--description=" + config.youtube['description'],
                  "--privacy=" + config.youtube['privacy'],
                  "--playlist=" + config.tags['album'],
                  "--client-secrets=" + config.youtube['client_secrets'],
                  "--credentials-file=" + config.youtube['credentials_file'],
+                 "--tags=" + config.youtube['tags'],
+                 "--publish-at=" + config.youtube['publish_at'],
+                 config.mkv_file]
+    else:
+        arguments = ["--title=" + youtube_title,
+                 "--category=" + config.youtube['category'],
+                 "--description=" + config.youtube['description'],
+                 "--privacy=" + config.youtube['privacy'],
+                 "--playlist=" + config.tags['album'],
+                 "--client-secrets=" + config.youtube['client_secrets'],
                  "--tags=" + config.youtube['tags'],
                  "--publish-at=" + config.youtube['publish_at'],
                  config.mkv_file]

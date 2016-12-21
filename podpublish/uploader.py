@@ -128,6 +128,8 @@ def wordpress_post(config):
     post.comment_status = config.wordpress['comment_status']
     if config.attach_header:
         post.thumbnail = attachment_id
+
+    # FIXME: Make sure tags and category are defined. Don't assume they are. 
     post.terms_names = {
         'post_tag': [config.wordpress['tags']],
         'category': [config.wordpress['category']]

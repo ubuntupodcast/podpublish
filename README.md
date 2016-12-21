@@ -160,14 +160,32 @@ If you plan to make a heavy use of the script, please
 [create and use your own OAuth 2.0 file](https://developers.google.com/youtube/registering_an_application),
 it's a free service. Steps:
 
-  * Go to the Google [console](https://console.developers.google.com/).
-  * _Create project_.
-  * Side menu: _APIs & auth_ -> _APIs_
-  * Top menu: _Enabled API(s)_: Enable all Youtube APIs.
-  * Side menu: _APIs & auth_ -> _Credentials_.
-  * _Create a Client ID_: Add credentials -> OAuth 2.0 Client ID -> Other -> Name: youtube-upload -> Create -> OK
-  * _Download JSON_: Under the section "OAuth 2.0 client IDs". Save the file to your local system.
-  * Use this JSON as your credentials file: `client-secrets=CLIENT_SECRETS`
+  * Go to the Google [Credentials page](https://console.developers.google.com/projectselector/apis/credentials).
+    * _Create project_.
+      * Project name: `YouTube Uploader`
+      * Click _Create_
+    * Click _Dashboard_ in the side panel under API Manager.
+      * Click _+ ENABLE API_
+      * Click the _YouTube Data API v3_
+      * Click _> ENABLE_ at the top of the screen.
+    * Click the _Credentials_ in the side panel under API Manager.
+      * Click _OAuth consent screen_ from the top menu.
+        * Email address: `you@example.org`
+        * Product name shown to users: `Yourname YouTube Uploader`
+        * Homepage URL: `http://example.org` (optional)
+        * Product logo URL: `http://example.org/favicon_128.png` (optional)
+        * Privacy policy URL: blank 
+        * Privacy policy URL: blank
+        * Click _Save_.
+    * Click the _Credentials_ in the side panel under API Manager.
+      * Click the _Create credentials_ pull down.
+      * Select _OAuth client ID_.
+        * Application type: `Other`
+        * Name: `youtube-upload`
+        * Click _Create_.
+        * The client ID and client secret will be displayed. No need to save them. Click _OK_.
+        * To the right of the client ID you just created click the download icon. Save the file to your local system.  
+        * Use this JSON as your client secrets file: `client-secrets=CLIENT_SECRETS`
 
 The following video may also be helpful in enabling the YouTube Data API
 and creating client secrets.

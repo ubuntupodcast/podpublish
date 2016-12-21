@@ -166,9 +166,9 @@ def mkv_encode(config, copy_audio = False):
         #wave
         filter_complex='-filter_complex "[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=cline:rate=' + str(frate) + ':colors=' + config.font_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
         #freq dots
-        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=dot:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w512:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
+        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=dot:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w512:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
         #freq lines
-        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=line:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w1024:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
+        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=line:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w1024:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
         tune_stillimage=' '
     else:
         print("Encoding static " + config.mkv_file)

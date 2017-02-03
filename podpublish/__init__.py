@@ -5,7 +5,7 @@
 # See the file "LICENSE" for the full license governing this code.
 
 __packagename__ = 'PodPublish'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __author__ = 'Ubuntu Podcast'
 __author_email__ = 'show@ubuntupodcast.org'
 __maintainer__ = 'Ubuntu Podcast'

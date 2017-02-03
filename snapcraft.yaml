@@ -1,5 +1,5 @@
 name: podpublish
-version: 0.0.2
+version: 0.0.3
 summary: A tool for encoding and publishing podcast content and assets
 description: |
  A tool for encoding and publishing podcast content and assets. Inspired by
@@ -7,7 +7,7 @@ description: |
  by Ubuntu Podcast and released under the GPLv2 license.
 
 confinement: strict
-grade: devel
+grade: stable
 
 # Export LC_ALL to work-around (LP: #1576411)
 apps:

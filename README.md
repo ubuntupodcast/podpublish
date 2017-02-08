@@ -10,7 +10,7 @@ license.
 
 # Snap Install
 
-    sudo snap install --devmode --channel edge podpublish
+    sudo snap install podpublish
 
 ## Ubuntu Podcast Setup
 

@@ -117,6 +117,9 @@ class Configuration(object):
         # tags
         self.tags = self.config['tags']
 
+        # links
+        self.links = self.config['links']
+
         # wordpress
         self.wordpress = self.config['wordpress']
 
@@ -146,38 +149,42 @@ class Configuration(object):
 
         # Wordpress will accept the Markdown directly.
         self.wordpress['content'] = self.config['show_notes']
-        #print(wp_text)
 
-        # Remove some Wordpress shortcodes
-        markdown_content = self.config['show_notes']
-        markdown_content = re.sub(r'\[/?powerpress[^\]]*?\]', '', markdown_content)
-        markdown_content = re.sub(r'\[/?tweet[^\]]*?\]', '', markdown_content)
+        # Get the short description
+        if self.wordpress['podcast_plugin'] == 'Powerpress':
+            # If using Powerpress extract everything up to the [powerpress] shortcode.
+            short_desc, sep, tail = self.config['show_notes'].partition('[powerpress]')
+        else:
+            # Get just the first sentence.
+            short_desc = re.match(r'(?:[^.:;]+[.:;]){1}', self.config['show_notes']).group()
 
-        # Convert Markdown to HTML.
-        html_content = markdown(markdown_content, extensions=['markdown.extensions.extra'])
+        # Convert Markdown -> HTML -> text
+        h = html2text.HTML2Text()
+        h.ignore_links = True
+        h.body_width = 0
+        short_desc = h.handle(markdown(short_desc))
 
-        # Convert HTML to text for use in audio metadata and on YouTube.
-        text_maker = html2text.HTML2Text()
-        text_maker.ignore_links = True
-        text_content = text_maker.handle(html_content)
-
-        # Some content may not be linkable or relevant in text form so
-        # throw away everything after the break_point.
-        if 'break_point' in self.config:
-            head, sep, tail = text_content.partition(self.config['break_point'])
-            text_content = head + sep
-
-        # Clean up some text conversion weirdness.
-        text_content = text_content.replace('\-', '-')
-
-        # If a website is in the tags include details so the YouTube
-        # description inludes a link.
+        # Build links
+        links = '\n'
         if self.tags['website']:
-            text_content = text_content + "\n\nFind more shows, or get in touch, on our website:\n\n  * " + self.tags['website']
+            links += "Find more shows on our website {}\n".format(self.tags['website'])
+        if self.links['telegram']:
+            links += "Join our Telegram community {}\n".format(self.links['telegram'])
+        if self.links['twitter']:
+            links += "Follow us on Twitter {}\n".format(self.links['twitter'])
+        if self.links['facebook']:
+            links += "Follow us on Facebook {}\n".format(self.links['facebook'])
+        if self.links['googleplus']:
+            links += "See our updates on Google+ {}\n".format(self.links['googleplus'])
+        if self.links['reddit']:
+            links += "Discuss the show on Reddit {}\n".format(self.links['reddit'])
 
-        self.tags['comments'] = text_content
-        self.youtube['description'] = text_content
-        #print(text_content)
+        # Append the links to the short description.
+        short_desc += links
+        #print(short_desc)
+
+        self.tags['comments'] = short_desc
+        self.youtube['description'] = short_desc
 
     def update_filename(self):
         self.episode_code = self.season_prefix + self.season + self.episode_prefix + self.episode

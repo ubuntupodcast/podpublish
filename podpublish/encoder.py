@@ -182,10 +182,9 @@ def mkv_encode(config, copy_audio = False):
     else:
         audio_params = '-c:a aac -r:a 44100 -strict experimental -b:a 384k'
 
-    global_options='-y -loop ' + str(loop) + ' -framerate ' + str(frate) + ' -pix_fmt yuv420p -threads 0'
-    # Add a 1sec audio delay to prevent loosing the first few audio packets
-    inputs = OrderedDict([(config.png_poster_file, None), (config.audio_in, '-itsoffset 1.0')])
-    outputs = OrderedDict([(config.mkv_file, filter_complex + '-c:v libx264 -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + audio_params + ' -shortest -movflags faststart -vframes 984')])
+    global_options='-y -loop ' + str(loop) + ' -framerate ' + str(frate) + ' -threads 0'
+    inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])
+    outputs = OrderedDict([(config.mkv_file, filter_complex + '-c:v libx264 -pix_fmt yuv420p -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + audio_params + ' -shortest -movflags faststart')])
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd)
     ff.run()

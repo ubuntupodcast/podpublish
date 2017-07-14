@@ -158,11 +158,15 @@ class Configuration(object):
             # Get just the first sentence.
             short_desc = re.match(r'(?:[^.:;]+[.:;]){1}', self.config['show_notes']).group()
 
+        # Strip presenter links
+        short_desc = short_desc.replace('[1]','').replace('[2]','').replace('[3]','').replace('[4]','')
+        short_desc = short_desc.replace('[','').replace(']','')
+
         # Convert Markdown -> HTML -> text
         h = html2text.HTML2Text()
         h.ignore_links = True
         h.body_width = 0
-        short_desc = h.handle(markdown(short_desc))
+        short_desc = h.handle(markdown(short_desc, extensions=['markdown.extensions.extra']))
 
         # Build links
         links = '\n'

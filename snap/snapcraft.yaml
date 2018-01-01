@@ -111,7 +111,7 @@ parts:
 
 # Cut down ffmpeg specific to podpublish needs
   ffmpeg:
-    source: http://ffmpeg.org/releases/ffmpeg-3.2.9.tar.bz2
+    source: http://ffmpeg.org/releases/ffmpeg-3.4.1.tar.bz2
     plugin: autotools
     configflags:
       - --enable-gpl

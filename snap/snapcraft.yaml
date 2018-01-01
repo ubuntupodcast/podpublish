@@ -150,19 +150,25 @@ apps:
     command: usr/bin/python3 $SNAP/bin/encode-podcast
     environment:
       LC_ALL: C.UTF-8
-    plugs: [home]
+    plugs:
+      - home
   publish-podcast:
     command: usr/bin/python3 $SNAP/bin/publish-podcast
     environment:
       LC_ALL: C.UTF-8
-    plugs: [home, network]
+    plugs:
+      - home
+      - network
   season-to-youtube:
     command: usr/bin/python3 $SNAP/bin/season-to-youtube
     environment:
       LC_ALL: C.UTF-8
-    plugs: [home]
+    plugs:
+      - home
   youtube-upload:
     command: usr/bin/python3 $SNAP/bin/youtube-upload
     environment:
       LC_ALL: C.UTF-8
-    plugs: [home, network]
+    plugs:
+      - home
+      - network

@@ -26,7 +26,7 @@ def main():
             print('ERROR! ' + config.mp3_file + ' is missing. Abort.')
             sys.exit(1)
 
-    if not config.skip_mp3 and not config.skip_sftp:
+    if not config.skip_ogg and not config.skip_sftp:
         if os.path.isfile(config.ogg_file):
             uploader.sftp_upload(config, config.ogg_file)
         else:

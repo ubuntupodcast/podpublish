@@ -1,5 +1,9 @@
 name: podpublish
-version: 'git'
+version: git
+version-script: |
+  VER=$(grep __version__ podpublish/__init__.py  | cut -d'=' -f2 | sed 's/ //g' | sed "s/'//g")
+  REV=$(git rev-parse --short HEAD)
+  echo $VER-$REV
 summary: A tool for encoding and publishing podcast content and assets
 description: |
  A tool for encoding and publishing podcast content and assets. Inspired by

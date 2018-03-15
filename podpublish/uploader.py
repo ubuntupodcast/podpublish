@@ -179,6 +179,7 @@ def youtube_upload(config):
                  "--credentials-file=" + config.youtube['credentials_file'],
                  "--tags=" + config.youtube['tags'],
                  "--publish-at=" + config.youtube['publish_at'],
+                 "--thumbnail=" + config.png_header_file,
                  config.mkv_file]
     else:
         arguments = ["--title=" + youtube_title,
@@ -189,6 +190,7 @@ def youtube_upload(config):
                  "--client-secrets=" + config.youtube['client_secrets'],
                  "--tags=" + config.youtube['tags'],
                  "--publish-at=" + config.youtube['publish_at'],
+                 "--thumbnail=" + config.png_header_file,
                  config.mkv_file]
 
     options, args = parser.parse_args(arguments)

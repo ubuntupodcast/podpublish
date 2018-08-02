@@ -37,11 +37,11 @@ Now symlink the Dropbox folder containing all the assets and configuration.
 
 To encode a podcast.
 
-    podpublish.encode_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.encode-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
 
 To upload a podcast.
  
-    podpublish.publish_podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
 
 # Legacy Installation
 

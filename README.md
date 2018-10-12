@@ -40,8 +40,15 @@ To encode a podcast.
     podpublish.encode-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
 
 To upload a podcast.
- 
+
     podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+
+## TODO
+
+  * Sanity check the number of tags before attempting a POST. 19 tags or fewer.
+  * Add support for Mastodon links.
+  * Add support for nvenc and VA-API hardware encoding.
+  * Add `gpg-keys` and `ssh-keys` support to the Snap.
 
 # Legacy Installation
 

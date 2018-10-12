@@ -115,6 +115,7 @@ class Configuration(object):
         self.sftp['port'] = int(self.sftp['port'])
 
         # tags
+        # FIXME - Bail out if more than 19 tags are defined.
         self.tags = self.config['tags']
 
         # links
@@ -169,6 +170,7 @@ class Configuration(object):
         short_desc = h.handle(markdown(short_desc, extensions=['markdown.extensions.extra']))
 
         # Build links
+        # FIXME - Add support for Mastodon
         links = '\n'
         if self.tags['website']:
             links += "Find more shows on our website {}\n".format(self.tags['website'])

@@ -10,7 +10,9 @@ license.
 
 # Snap Install
 
-    sudo snap install podpublish
+    snap install podpublish
+    snap connect podpublish:gpg-keys
+    snap connect podpublish:ssh-keys
 
 ## Ubuntu Podcast Setup
 
@@ -28,27 +30,23 @@ Run the following, which will create the data directory.
 
 Now symlink the Dropbox folder containing all the assets and configuration.
 
-    for DIR in ~/snap/podpublish/*/; do mkdir -- "${DIR}/.ssh"; done
-    for DIR in ~/snap/podpublish/*/; do ln -s ~/.ssh/known_hosts "${DIR}/.ssh/"; done
-    for DIR in ~/snap/podpublish/*/; do mkdir -- "${DIR}/Dropbox"; done
-    for DIR in ~/snap/podpublish/*/; do ln -s ~/Dropbox/UbuntuPodcast "${DIR}/Dropbox/"; done
+    ln -s ~/Dropbox ~/snap/podpublish/current/Dropbox
 
 ## Basic usage
 
 To encode a podcast.
 
-    podpublish.encode-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.encode-podcast ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
 
 To upload a podcast.
 
-    podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S09/s09exx.ini
+    podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
 
 ## TODO
 
   * Sanity check the number of tags before attempting a POST. 19 tags or fewer.
   * Add support for Mastodon links.
   * Add support for nvenc and VA-API hardware encoding.
-  * Add `gpg-keys` and `ssh-keys` support to the Snap.
 
 # Legacy Installation
 

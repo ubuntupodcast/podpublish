@@ -219,7 +219,6 @@ parts:
       - --disable-libtheora
       - --disable-libvpx
       - --disable-libx265
-      - --disable-static
     build-packages:
       - gcc
       - libdrm-dev
@@ -272,6 +271,7 @@ apps:
       - home
       - opengl
       - removable-media
+      - x11
   publish-podcast:
     command: usr/bin/python3 $SNAP/bin/publish-podcast
     environment:

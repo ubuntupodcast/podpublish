@@ -231,6 +231,7 @@ apps:
       LC_ALL: C.UTF-8
     plugs:
       - home
+      - opengl
   publish-podcast:
     command: usr/bin/python3 $SNAP/bin/publish-podcast
     environment:

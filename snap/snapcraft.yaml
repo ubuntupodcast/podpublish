@@ -133,13 +133,13 @@ parts:
     configflags:
       - --prefix=/usr
       - --disable-cli
-      - --enable-pic
       - --enable-shared
       - --enable-strip
     after:
       - nasm
     prime:
       - usr/lib
+      - -usr/lib/pkgconfig
 
   fdk-aac:
     plugin: autotools
@@ -151,6 +151,7 @@ parts:
       - --disable-static
     prime:
       - usr/lib
+      - -usr/lib/pkgconfig
 
   lame:
     plugin: autotools
@@ -161,6 +162,7 @@ parts:
     source: http://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
     prime:
       - usr/lib
+      - -usr/lib/pkgconfig
 
   libogg:
     plugin: autotools
@@ -197,13 +199,19 @@ parts:
      - libvorbis
      - lame
     configflags:
+      - --prefix=/usr
+      - --enable-cuda
+      - --enable-cuvid
       - --enable-gpl
       - --enable-nonfree
       - --enable-libfreetype
       - --enable-libmp3lame
       - --enable-libvorbis
       - --enable-libx264
+      - --enable-nvenc
+      - --disable-atomic-arm-linux-helpers
       - --disable-avdevice
+      - --disable-debug
       - --disable-doc
       - --disable-ffplay
       - --disable-ffprobe
@@ -212,41 +220,76 @@ parts:
       - --disable-libtheora
       - --disable-libvpx
       - --disable-libx265
+      - --disable-static
     build-packages:
       - gcc
+      - libdrm-dev
       - libfreetype6-dev
+      - libvdpau-dev
       - pkg-config
       - yasm
       - zlib1g-dev
-    organize:
-      usr/local/bin: usr/bin
+    stage-packages:
+      - i965-va-driver
+      - libdrm2
+      - libva-drm1
+      - libvdpau-va-gl1
+      - mesa-va-drivers
+      - mesa-vdpau-drivers
     prime:
-      - usr/bin/ffmpeg
+      - usr/bin
+      - usr/lib
+      - -usr/lib/pkgconfig
+      - -usr/include
+      - -usr/share/doc
+      - -usr/share/man
+
+  encode-wrapper:
+    plugin: dump
+    source: files
+    stage-packages:
+      - mesa-utils
+    organize:
+      'encode-wrapper': bin/
+    after:
+      - ffmpeg
 
 # Export LC_ALL to work-around http://pad.lv/1576411
 apps:
   encode-podcast:
-    command: usr/bin/python3 $SNAP/bin/encode-podcast
+    command: bin/encode-wrapper
     environment:
       LC_ALL: C.UTF-8
+      # Tell libGL where to find the drivers
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_PLATFORM/dri
+      # Mesa Libs for OpenGL support
+      # Workaround in snapd for proprietary nVidia drivers mounts the drivers in
+      # /var/lib/snapd/lib/gl that needs to be in LD_LIBRARY_PATH
+      # Without that OpenGL using apps do not work with the nVidia drivers.
+      # Ref.: https://bugs.launchpad.net/snappy/+bug/1588192
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_PLATFORM/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_PLATFORM/mesa-egl:$LIBGL_DRIVERS_PATH:/var/lib/snapd/lib/gl
     plugs:
+      - hardware-observe
       - home
       - opengl
+      - removable-media
   publish-podcast:
     command: usr/bin/python3 $SNAP/bin/publish-podcast
     environment:
       LC_ALL: C.UTF-8
     plugs:
       - home
-      - network
-      - ssh-keys
       - gpg-keys
+      - network
+      - removable-media
+      - ssh-keys
   season-to-youtube:
     command: usr/bin/python3 $SNAP/bin/season-to-youtube
     environment:
       LC_ALL: C.UTF-8
     plugs:
       - home
+      - removable-media
   youtube-upload:
     command: usr/bin/python3 $SNAP/bin/youtube-upload
     environment:
@@ -254,3 +297,4 @@ apps:
     plugs:
       - home
       - network
+      - removable-media

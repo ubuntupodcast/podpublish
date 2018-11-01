@@ -138,6 +138,10 @@ class Configuration(object):
         self.attach_header = self.config.get('wordpress').as_bool('attach_header')
         self.skip_youtube = self.config.get('youtube').as_bool('skip')
         self.animated_video = self.config.get('youtube').as_bool('animated')
+        try:
+          self.codec = self.config['youtube']['codec']
+        except:
+          self.codec = 'libx264'
 
         # If global configuration exists for 'show_notes', cast magic.
         # This implies your show notes are in Markdown.

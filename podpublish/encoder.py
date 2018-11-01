@@ -37,7 +37,7 @@ def audio_encode(config, audio_format):
         bitrate=audio_bitrate,
         codec=audio_codec,
         format=audio_format,
-        parameters=['-ac', audio_channels, '-threads', '0']
+        parameters=['-ac', audio_channels]
         )
 
 def mp3_tag(config):
@@ -182,9 +182,16 @@ def mkv_encode(config, copy_audio = False):
     else:
         audio_params = '-c:a aac -r:a 44100 -strict experimental -b:a 384k'
 
-    global_options='-y -loop ' + str(loop) + ' -framerate ' + str(frate) + ' -threads 0'
+    if config.codec == 'h264_vaapi':
+        vaapi_device = '-vaapi_device /dev/dri/renderD128 '
+        vaapi_filter = "-vf 'format=nv12,hwupload' "
+    else:
+        vaapi_device = ''
+        vaapi_filter = ''
+
+    global_options='-hide_banner -y -loop ' + str(loop) + ' -framerate ' + str(frate)
     inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])
-    outputs = OrderedDict([(config.mkv_file, filter_complex + '-c:v libx264 -pix_fmt yuv420p -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + audio_params + ' -shortest -movflags faststart')])
+    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + vaapi_filter + '-c:v ' + config.codec + ' -pix_fmt yuv420p -preset ultrafast -bf 2 -flags +cgop' + tune_stillimage + audio_params + ' -shortest -movflags faststart')])
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd)
     ff.run()

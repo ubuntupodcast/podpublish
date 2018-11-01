@@ -12,6 +12,8 @@ license.
 
     snap install podpublish
     snap connect podpublish:gpg-keys
+    snap connect podpublish:hardware-observe
+    snap connect podpublish:removable-media
     snap connect podpublish:ssh-keys
 
 ## Ubuntu Podcast Setup
@@ -30,7 +32,8 @@ Run the following, which will create the data directory.
 
 Now symlink the Dropbox folder containing all the assets and configuration.
 
-    ln -s ~/Dropbox ~/snap/podpublish/current/Dropbox
+    mkdir -p ~/snap/podpublish/current/Dropbox
+    ln -s ~/Dropbox/UbuntuPodcast ~/snap/podpublish/current/Dropbox/UbuntuPodcast
 
 ## Basic usage
 
@@ -46,6 +49,7 @@ To upload a podcast.
 
   * Sanity check the number of tags before attempting a POST. 19 tags or fewer.
   * Add support for Mastodon links.
+  * Add support for chapter markers.
 
 # Legacy Installation
 

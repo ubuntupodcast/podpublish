@@ -209,7 +209,6 @@ parts:
       - --enable-libvorbis
       - --enable-libx264
       - --enable-nvenc
-      - --disable-atomic-arm-linux-helpers
       - --disable-avdevice
       - --disable-debug
       - --disable-doc

@@ -113,9 +113,17 @@ parts:
       - $cruft_python_wheel
       - $cruft_x11
 
+  nv-codec-headers:
+    plugin: make
+    source: https://github.com/FFmpeg/nv-codec-headers/releases/download/n8.2.15.4/nv-codec-headers-8.2.15.4.tar.gz
+    override-build: |
+      make install PREFIX=/usr
+    build-packages:
+      - pkg-config
+
   nasm:
     plugin: autotools
-    source: http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.xz
+    source: http://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.xz
     configflags:
       - --prefix=/usr
 
@@ -183,6 +191,7 @@ parts:
     source: http://ffmpeg.org/releases/ffmpeg-4.0.2.tar.bz2
     plugin: autotools
     after:
+     - nv-codec-headers
      - x264
      - fdk-aac
      - libvorbis
@@ -198,7 +207,6 @@ parts:
       - --disable-doc
       - --disable-ffplay
       - --disable-ffprobe
-      - --disable-ffserver
       - --disable-libass
       - --disable-libopus
       - --disable-libtheora
@@ -230,6 +238,8 @@ apps:
     plugs:
       - home
       - network
+      - ssh-keys
+      - gpg-keys
   season-to-youtube:
     command: usr/bin/python3 $SNAP/bin/season-to-youtube
     environment:

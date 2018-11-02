@@ -161,7 +161,6 @@ def mkv_encode(config, copy_audio = False):
     # just use the static poster image and audio.
 
     # Only x264 has the `-tune` option so set to empty by default.
-    tune_stillimage=' '
     if config.animated_video:
         print("Encoding animated " + config.mkv_file)
         frate=24
@@ -172,6 +171,7 @@ def mkv_encode(config, copy_audio = False):
         #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=dot:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w512:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
         #freq lines
         #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=line:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w1024:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
+        tune_stillimage=' '
     else:
         print("Encoding static " + config.mkv_file)
         frate = 1
@@ -179,6 +179,7 @@ def mkv_encode(config, copy_audio = False):
         filter_complex = ''
         tune_stillimage = ' -tune stillimage '
 
+    audio_filter = ' -af "aresample=async=1:min_hard_comp=0.100000:first_pts=0" '
     if copy_audio:
         audio_params = '-c:a copy'
     else:
@@ -187,20 +188,22 @@ def mkv_encode(config, copy_audio = False):
     # Tweak the encoder options.
     if config.codec == 'h264_vaapi':
         vaapi_device = ' -vaapi_device /dev/dri/renderD128 '
-        vaapi_filter = " -vf 'format=nv12,hwupload' "
+        video_filter = " -vf 'format=nv12,hwupload' "
         preset=' -quality 8 '
+        tune_stillimage=' '
     elif config.codec == 'h264_nvenc':
         vaapi_device = ''
-        vaapi_filter = ''
+        video_filter = ''
         preset=' -preset fast '
+        tune_stillimage=' '
     else:
         vaapi_device = ''
-        vaapi_filter = ''
+        video_filter = ''
         preset=' -preset ultrafast '
 
     global_options='-hide_banner -y -loop ' + str(loop) + ' -framerate ' + str(frate)
     inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])
-    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + vaapi_filter + '-c:v ' + config.codec + ' -pix_fmt yuv420p ' + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_params + ' -shortest -movflags faststart')])
+    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + video_filter + '-c:v ' + config.codec + ' -pix_fmt yuv420p ' + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_filter + audio_params + ' -shortest -movflags faststart')])
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd)
     ff.run()

@@ -135,11 +135,13 @@ parts:
       - --disable-cli
       - --enable-shared
       - --enable-strip
-    after:
-      - nasm
     prime:
       - usr/lib
       - -usr/lib/pkgconfig
+    build-packages:
+      - libva-dev
+    after:
+      - nasm
 
   fdk-aac:
     plugin: autotools
@@ -200,16 +202,7 @@ parts:
      - lame
     configflags:
       - --prefix=/usr
-      - --enable-cuda
-      - --enable-cuvid
-      - --enable-gpl
-      - --enable-nonfree
-      - --enable-libfreetype
-      - --enable-libmp3lame
-      - --enable-libvorbis
-      - --enable-libx264
-      - --enable-nvenc
-      - --disable-avdevice
+      #- --disable-avdevice
       - --disable-debug
       - --disable-doc
       - --disable-ffplay
@@ -219,10 +212,27 @@ parts:
       - --disable-libtheora
       - --disable-libvpx
       - --disable-libx265
+      - --enable-cuda
+      - --enable-cuvid
+      - --enable-gpl
+      - --enable-libdrm
+      - --enable-libfdk-aac
+      - --enable-libfreetype
+      - --enable-libmp3lame
+      - --enable-libvorbis
+      - --enable-libx264
+      - --enable-nonfree
+      - --enable-nvenc
+      - --enable-runtime-cpudetect
+      - --enable-shared
+      - --enable-vaapi
+      - --enable-vdpau
+      - --enable-version3
     build-packages:
       - gcc
       - libdrm-dev
       - libfreetype6-dev
+      - libva-dev
       - libvdpau-dev
       - pkg-config
       - yasm
@@ -249,8 +259,6 @@ parts:
       - mesa-utils
     organize:
       'encode-wrapper': bin/
-    after:
-      - ffmpeg
 
 # Export LC_ALL to work-around http://pad.lv/1576411
 apps:

@@ -206,7 +206,6 @@ parts:
       - --disable-debug
       - --disable-doc
       - --disable-ffplay
-      - --disable-ffprobe
       - --disable-libass
       - --disable-libopus
       - --disable-libtheora

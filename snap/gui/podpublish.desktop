@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=PodPublish
+Exec=podpublish.encode-podcast
+Icon=${SNAP}/meta/gui/podpublish.png
+Type=Application
+Terminal=true
+Categories=AudioVideo;
+NoDisplay=true

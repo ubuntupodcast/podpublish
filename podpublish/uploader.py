@@ -16,6 +16,7 @@ from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost, EditPost
 from wordpress_xmlrpc.compat import xmlrpc_client
 from wordpress_xmlrpc.methods import media, posts
+from phpserialize import dumps
 from youtube_upload import main as yt
 
 def _sftp_put_file(config, cinfo, file_in):
@@ -80,11 +81,6 @@ def get_audio_size_and_duration(config):
         mp3_duration = str(datetime.timedelta(seconds=mp3_seconds))
         config.mp3['size'] = os.path.getsize(config.mp3_file)
         config.mp3['duration'] = mp3_duration
-        print('MP3 size: ' + str(config.mp3['size']))
-        print('MP3 duration: ' + str(config.mp3['duration']))
-        # Hack
-        if config.basename == 'ubuntupodcast':
-            print('MP3 URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.mp3_file)
 
     if not config.skip_ogg:
         ogg = OggVorbis(config.ogg_file)
@@ -92,11 +88,8 @@ def get_audio_size_and_duration(config):
         ogg_duration = str(datetime.timedelta(seconds=ogg_seconds))
         config.ogg['size'] = os.path.getsize(config.ogg_file)
         config.ogg['duration'] = ogg_duration
-        print('Ogg size: ' + str(config.ogg['size']))
-        print('Ogg duration: ' + str(config.ogg['duration']))
-        # Hack
-        if config.basename == 'ubuntupodcast':
-            print('Ogg URL: http://static.ubuntupodcast.org/ubuntupodcast/s' + config.season + '/e' + config.episode + '/' + config.ogg_file)
+
+    return config
 
 def wordpress_post(config):
     print("Connecting to: " + config.wordpress['xmlrpc'])
@@ -134,10 +127,49 @@ def wordpress_post(config):
         'post_tag': [config.wordpress['tags']],
         'category': [config.wordpress['category']]
     }
-    post.id = wp.call(NewPost(post))
+
+    url = config.wordpress['uploads_url'].format(config.season, config.episode, config.mp3_file)
 
     if config.wordpress['podcast_plugin'] == 'Powerpress':
-        get_audio_size_and_duration(config)
+        config = get_audio_size_and_duration(config)
+    
+        enclosureData = {
+            'duration':    config.mp3['duration'],
+            'size':        config.mp3['size'],
+            ### Below items are best left undefined unless we really
+            ### want to force their settings per upload.
+            # 'embed':       True,
+            # 'keywords':    '',
+            # 'subtitle':    '',
+            # 'summary':     '',
+            # 'gp_desc':     '',
+            # 'gp_explicit': False,
+            # 'gp_block':    '',
+            # 'author':      '',
+            # 'no_player':   False,
+            # 'no_links':    False,
+            # 'explicit':    False,
+            # 'cc':          '',
+            # 'order':       0,
+            # 'always':      '',
+            # 'block':       '',
+            # 'image':       '',
+            # 'ishd':        False, # Is an HD Video
+            # 'height':      0,     # Video Height
+            # 'width':       0,     # Video Width
+            # 'webm_src':    '',
+            # 'feed_title':  '',
+        }
+
+        post.custom_fields = []
+        post.custom_fields.append({
+            'key': 'enclosure',
+            'value': "{}\n{}\n{}\n{}".format(url, config.mp3['size'],
+                config.tags['podcast_type'] or 'episodic',
+                dumps(enclosureData).decode('ascii')),
+        })
+
+    post.id = wp.call(NewPost(post))
 
 def youtube_upload(config):
     print("Uploading " + config.mkv_file + ' to YouTube')

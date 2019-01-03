@@ -128,6 +128,8 @@ def wordpress_post(config):
     post.comment_status = config.wordpress['comment_status']
     if config.attach_header:
         post.thumbnail = attachment_id
+    if config.wordpress['post_format'] == 'future' and config.wordpress['post_date'] != '':
+        post.post_date = config.wordpress['post_date']
 
     # FIXME: Make sure tags and category are defined. Don't assume they are. 
     post.terms_names = {

@@ -45,6 +45,12 @@ To upload a podcast.
 
     podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
 
+To upload a podcast with a future date, set `wordpress.post_status` to `future` and...
+
+    podpublish.publish-podcast --publishDate='1970-01-01 00:00:00' ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
+
+(The format for `--publishDate` is `YYYY-MM-DD HH:mm:ss`)
+
 ## TODO
 
   * Sanity check the number of tags before attempting a POST. 19 tags or fewer.

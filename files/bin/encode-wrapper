@@ -13,8 +13,8 @@ fi
 VENDOR=$(glxinfo | grep "OpenGL vendor")
 
 if [[ $VENDOR == *"Intel"* ]]; then
-  export VDPAU_DRIVER_PATH="${SNAP}/usr/lib/$ARCH/dri"
-  export LIBVA_DRIVERS_PATH="${SNAP}/usr/lib/$ARCH/dri"
+  export VDPAU_DRIVER_PATH="${SNAP}/usr/lib/${ARCH}/dri"
+  export LIBVA_DRIVERS_PATH="${SNAP}/usr/lib/${ARCH}/dri"
 fi
 
 if [[ $VENDOR == *"NVIDIA"* ]]; then

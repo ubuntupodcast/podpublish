@@ -14,10 +14,13 @@ from podpublish import uploader
 def main():
     parser = argparse.ArgumentParser(description='Publish a podcast, previously encoded with encode_podcast, to sftp and YouTube.')
     parser.add_argument('--version', action='version', version=podpublish.__version__)
+    argparser.add_argument("--publishDate", default="",
+        help="Publish date for future WordPress posts. Format: YYYY-MM-DD HH:mm:ss")
     parser.add_argument('filename', type=argparse.FileType('r'), help="Podcast configuration file.")
+
     args = parser.parse_args()
 
-    config = configuration.Configuration(args.filename)
+    config = configuration.Configuration(args.filename, args)
 
     if not config.skip_mp3 and not config.skip_sftp:
         if os.path.isfile(config.mp3_file):

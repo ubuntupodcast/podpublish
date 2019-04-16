@@ -20,9 +20,13 @@ def check_exists(file_in):
 
 class Configuration(object):
 
-    def __init__(self, ini_file):
+    def __init__(self, ini_file, args):
         # TODO: Use a ConfigSpec to validate the ini file.
         self.config = configobj.ConfigObj(ini_file)
+
+        # TODO: Validate date format
+        if self.config['wordpress']['post_status'] == 'future' and args['publishDate'] != "":
+            self.config['wordpress']['post_date'] = args['publishDate']
 
         # expand any relative file paths.
         if self.config['artwork']['backdrop'].startswith('~'):

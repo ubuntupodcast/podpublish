@@ -18,32 +18,32 @@ license.
 
 ## Ubuntu Podcast Setup
 
-The snap `home` interface munges `${HOME}` and my use case for podpublish is to 
-use configuration files that contain relative paths to podcast assets, such as 
+The snap `home` interface munges `${HOME}` and my use case for podpublish is to
+use configuration files that contain relative paths to podcast assets, such as
 audio files and artwork.
 
-The Ubuntu Podcast team use Dropbox to sync all the show assets, therefore the 
-Dropbox directory needs to be symlinked into the podpublish snap data 
+The Ubuntu Podcast team use Syncthing to sync all the show assets, therefore the
+Syncthing directory needs to be symlinked into the podpublish snap data
 directory.
 
 Run the following, which will create the data directory.
 
     podpublish.encode-podcast --version
 
-Now symlink the Dropbox folder containing all the assets and configuration.
+Now symlink the Syncthing folder containing all the assets and configuration.
 
-    mkdir -p ~/snap/podpublish/current/Dropbox
-    ln -s ~/Dropbox/UbuntuPodcast ~/snap/podpublish/current/Dropbox/UbuntuPodcast
+    mkdir -p ~/snap/podpublish/current/Syncthing
+    ln -s ~/Syncthing/UbuntuPodcast ~/snap/podpublish/current/Syncthing/UbuntuPodcast
 
 ## Basic usage
 
 To encode a podcast.
 
-    podpublish.encode-podcast ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
+    podpublish.encode-podcast ~/Syncthing/UbuntuPodcast/Configs/S11/s11exx.ini
 
 To upload a podcast.
 
-    podpublish.publish-podcast ~/Dropbox/UbuntuPodcast/Configs/S11/s11exx.ini
+    podpublish.publish-podcast ~/Syncthing/UbuntuPodcast/Configs/S11/s11exx.ini
 
 ## TODO
 
@@ -53,7 +53,7 @@ To upload a podcast.
 
 # Legacy Installation
 
-Here are the legacy install instructions which assume you're running Ubuntu 
+Here are the legacy install instructions which assume you're running Ubuntu
 16.04 or newer.
 
 ## Install ffmpeg and pip
@@ -182,7 +182,7 @@ it's a free service. Steps:
         * Product name shown to users: `Yourname YouTube Uploader`
         * Homepage URL: `http://example.org` (optional)
         * Product logo URL: `http://example.org/favicon_128.png` (optional)
-        * Privacy policy URL: blank 
+        * Privacy policy URL: blank
         * Privacy policy URL: blank
         * Click _Save_.
     * Click the _Credentials_ in the side panel under API Manager.
@@ -192,7 +192,7 @@ it's a free service. Steps:
         * Name: `youtube-upload`
         * Click _Create_.
         * The client ID and client secret will be displayed. No need to save them. Click _OK_.
-        * To the right of the client ID you just created click the download icon. Save the file to your local system.  
+        * To the right of the client ID you just created click the download icon. Save the file to your local system.
         * Use this JSON as your client secrets file: `client-secrets=CLIENT_SECRETS`
 
 The following video may also be helpful in enabling the YouTube Data API

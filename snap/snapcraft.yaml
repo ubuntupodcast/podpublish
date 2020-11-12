@@ -117,7 +117,8 @@ parts:
 
   nv-codec-headers:
     plugin: make
-    source: https://github.com/FFmpeg/nv-codec-headers/releases/download/n8.2.15.7/nv-codec-headers-8.2.15.7.tar.gz
+    source: https://github.com/FFmpeg/nv-codec-headers.git
+    source-branch: 'sdk/9.1'
     override-build: |
       make install PREFIX=/usr
     build-packages:
@@ -125,7 +126,7 @@ parts:
 
   fdk-aac:
     plugin: autotools
-    source: https://github.com/mstorsjo/fdk-aac/archive/v2.0.0.tar.gz
+    source: https://github.com/mstorsjo/fdk-aac/archive/v2.0.1.tar.gz
     build-packages:
       - g++
     configflags:
@@ -137,7 +138,8 @@ parts:
 
   ffmpeg:
     plugin: autotools
-    source: https://ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
+    source: https://github.com/FFmpeg/FFmpeg.git
+    source-branch: release/4.3
     build-packages:
       - libdrm-dev
       - libfreetype6-dev

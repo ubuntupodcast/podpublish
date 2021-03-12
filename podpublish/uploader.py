@@ -197,9 +197,8 @@ def youtube_upload(config):
     parser.add_option('', '--open-link', dest='open_link', action='store_true')
 
     # YouTube has a 100 character title limit
-    full_title = config.tags['album'] + ' ' + config.tags['title']
+    full_title = config.youtube['title']
     youtube_title = full_title[:99]
-
 
     if config.youtube['credentials_file']:
         arguments = ["--title=" + youtube_title,

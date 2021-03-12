@@ -1,6 +1,6 @@
 cffi==1.8.3
 configobj==5.0.6
-cryptography==2.4.2
+cryptography==3.3.2
 ffmpy==0.2.2
 google-api-python-client==1.5.3
 html2text==2016.9.19

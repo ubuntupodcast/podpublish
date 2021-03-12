@@ -122,7 +122,7 @@ def wordpress_post(config):
     if config.attach_header:
         post.thumbnail = attachment_id
 
-    # FIXME: Make sure tags and category are defined. Don't assume they are. 
+    # FIXME: Make sure tags and category are defined. Don't assume they are.
     post.terms_names = {
         'post_tag': [config.wordpress['tags']],
         'category': [config.wordpress['category']]
@@ -132,7 +132,7 @@ def wordpress_post(config):
 
     if config.wordpress['podcast_plugin'] == 'Powerpress':
         config = get_audio_size_and_duration(config)
-    
+
         enclosureData = {
             'duration':    config.mp3['duration'],
             'size':        config.mp3['size'],

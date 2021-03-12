@@ -192,19 +192,25 @@ def mkv_encode(config, copy_audio = False):
         video_filter = " -vf 'format=nv12,hwupload' "
         preset=' -quality 8 -b:v ' + config.youtube['bitrate'] + ' -profile:v high'
         tune_stillimage=' '
+        pix_fmt_in='rgb24'
+        pix_fmt_out='yuv420p'
     elif config.codec == 'h264_nvenc':
         vaapi_device = ''
         video_filter = ''
         preset=' -preset llhp -rc cbr_ld_hq -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -vsync 0 '
         tune_stillimage=' '
+        pix_fmt_in='rgb0'
+        pix_fmt_out='nv12'
     else:
         vaapi_device = ''
         video_filter = ''
         preset=' -preset fast -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -x264opts no-sliced-threads:nal-hrd=cbr -tune zerolatency -threads 4 -vsync 0 '
+        pix_fmt_in='rgb24'
+        pix_fmt_out='yuv420p'
 
     global_options='-hide_banner -y -loop ' + str(loop) + ' -framerate ' + str(frate)
-    inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])
-    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + video_filter + '-c:v ' + config.codec + ' -pix_fmt yuv420p ' + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_filter + audio_params + ' -shortest -movflags faststart')])
+    inputs = OrderedDict([(config.png_poster_file, '-pix_fmt ' + pix_fmt_in), (config.audio_in, None)])
+    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + video_filter + '-c:v ' + config.codec + ' -pix_fmt ' + pix_fmt_out + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_filter + audio_params + ' -shortest -movflags faststart')])
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd)
     ff.run()

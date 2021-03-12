@@ -166,12 +166,12 @@ def mkv_encode(config, copy_audio = False):
         print("Encoding animated " + config.mkv_file)
         frate=24
         loop=0
-        #wave
-        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=cline:rate=' + str(frate) + ':colors=' + config.font_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
-        #freq dots
-        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=dot:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w512:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
-        #freq lines
-        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=line:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w1024:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
+        if config.fill_y_stop >= config.img_poster_height:
+            filter_y = config.fill_y_start - (config.fill_y_stop - config.fill_y_start)
+        else:
+            filter_y = config.fill_y_stop
+
+        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 3) +':mode=line:rate=' + str(frate // 2) + ':colors=' + config.line_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str(filter_y) + ',colorkey=' + config.fill_color + '" '
         tune_stillimage=' '
     else:
         print("Encoding static " + config.mkv_file)

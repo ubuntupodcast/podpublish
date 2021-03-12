@@ -190,17 +190,17 @@ def mkv_encode(config, copy_audio = False):
     if config.codec == 'h264_vaapi':
         vaapi_device = ' -vaapi_device /dev/dri/renderD128 '
         video_filter = " -vf 'format=nv12,hwupload' "
-        preset=' -quality 8 '
+        preset=' -quality 8 -b:v ' + config.youtube['bitrate'] + ' -profile:v high'
         tune_stillimage=' '
     elif config.codec == 'h264_nvenc':
         vaapi_device = ''
         video_filter = ''
-        preset=' -preset fast '
+        preset=' -preset llhp -rc cbr_ld_hq -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -vsync 0 '
         tune_stillimage=' '
     else:
         vaapi_device = ''
         video_filter = ''
-        preset=' -preset ultrafast '
+        preset=' -preset fast -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -x264opts no-sliced-threads:nal-hrd=cbr -tune zerolatency -threads 4 -vsync 0 '
 
     global_options='-hide_banner -y -loop ' + str(loop) + ' -framerate ' + str(frate)
     inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])

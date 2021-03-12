@@ -191,6 +191,8 @@ class Configuration(object):
 
         # Append the links to the short description.
         short_desc += links
+        if self.youtube['hash_tags']:
+            short_desc += "\n" + self.youtube['hash_tags']
         #print(short_desc)
 
         self.tags['comments'] = short_desc

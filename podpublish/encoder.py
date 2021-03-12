@@ -135,6 +135,7 @@ def png_poster(config):
     # Write artist and underline it
     draw.text((artist_x_offset, config.fill_y_start), artist, fill=config.font_color, font=font)
     draw.line(((artist_x_offset, config.fill_y_start + artist_h + 4),(config.img_poster_width - artist_x_offset, config.fill_y_start + artist_h + 4)), fill=config.line_color)
+    draw.line(((artist_x_offset, config.fill_y_start + artist_h + 5),(config.img_poster_width - artist_x_offset, config.fill_y_start + artist_h + 5)), fill=config.line_color)
 
     fontsize = config.font_size
     while True:

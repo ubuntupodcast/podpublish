@@ -188,13 +188,15 @@ class Configuration(object):
             links += "Follow us on Twitter {}\n".format(self.links['twitter'])
         if self.links['facebook']:
             links += "Follow us on Facebook {}\n".format(self.links['facebook'])
-        if self.links['googleplus']:
-            links += "See our updates on Google+ {}\n".format(self.links['googleplus'])
+        if self.links['mastodon']:
+            links += "See our updates on Mastodon {}\n".format(self.links['mastodon'])
         if self.links['reddit']:
             links += "Discuss the show on Reddit {}\n".format(self.links['reddit'])
 
         # Append the links to the short description.
         short_desc += links
+        if self.youtube['hash_tags']:
+            short_desc += "\n" + self.youtube['hash_tags']
         #print(short_desc)
 
         self.tags['comments'] = short_desc

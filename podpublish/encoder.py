@@ -135,6 +135,7 @@ def png_poster(config):
     # Write artist and underline it
     draw.text((artist_x_offset, config.fill_y_start), artist, fill=config.font_color, font=font)
     draw.line(((artist_x_offset, config.fill_y_start + artist_h + 4),(config.img_poster_width - artist_x_offset, config.fill_y_start + artist_h + 4)), fill=config.line_color)
+    draw.line(((artist_x_offset, config.fill_y_start + artist_h + 5),(config.img_poster_width - artist_x_offset, config.fill_y_start + artist_h + 5)), fill=config.line_color)
 
     fontsize = config.font_size
     while True:
@@ -165,12 +166,12 @@ def mkv_encode(config, copy_audio = False):
         print("Encoding animated " + config.mkv_file)
         frate=24
         loop=0
-        #wave
-        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=cline:rate=' + str(frate) + ':colors=' + config.font_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
-        #freq dots
-        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=dot:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w512:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
-        #freq lines
-        #filter_complex='-filter_complex "[0:v]null[bg];[1:a]showfreqs=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 2) +':mode=line:colors=' + config.font_color + ':ascale=log:fscale=lin:win_size=w1024:win_func=hamming[fg];[bg][fg]overlay=0:' + str( (config.img_poster_height // 4) + (config.fill_y_stop // 2)) + ',colorkey=' + config.fill_color + '" '
+        if config.fill_y_stop >= config.img_poster_height:
+            filter_y = config.fill_y_start - (config.fill_y_stop - config.fill_y_start)
+        else:
+            filter_y = config.fill_y_stop
+
+        filter_complex='-filter_complex "[0:v]null[bg];[1:a]showwaves=s=' + str(config.img_poster_width) + 'x' + str(config.img_poster_height // 3) +':mode=line:rate=' + str(frate // 2) + ':colors=' + config.line_color + ':scale=lin[fg];[bg][fg]overlay=0:' + str(filter_y) + ',colorkey=' + config.fill_color + '" '
         tune_stillimage=' '
     else:
         print("Encoding static " + config.mkv_file)
@@ -189,21 +190,27 @@ def mkv_encode(config, copy_audio = False):
     if config.codec == 'h264_vaapi':
         vaapi_device = ' -vaapi_device /dev/dri/renderD128 '
         video_filter = " -vf 'format=nv12,hwupload' "
-        preset=' -quality 8 '
+        preset=' -quality 8 -b:v ' + config.youtube['bitrate'] + ' -profile:v high'
         tune_stillimage=' '
+        pix_fmt_in='rgb24'
+        pix_fmt_out='yuv420p'
     elif config.codec == 'h264_nvenc':
         vaapi_device = ''
         video_filter = ''
-        preset=' -preset fast '
+        preset=' -preset llhp -rc cbr_ld_hq -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -vsync 0 '
         tune_stillimage=' '
+        pix_fmt_in='rgb0'
+        pix_fmt_out='nv12'
     else:
         vaapi_device = ''
         video_filter = ''
-        preset=' -preset ultrafast '
+        preset=' -preset fast -b:v ' + config.youtube['bitrate'] + ' -profile:v high -g 999999 -x264opts no-sliced-threads:nal-hrd=cbr -tune zerolatency -threads 4 -vsync 0 '
+        pix_fmt_in='rgb24'
+        pix_fmt_out='yuv420p'
 
     global_options='-hide_banner -y -loop ' + str(loop) + ' -framerate ' + str(frate)
-    inputs = OrderedDict([(config.png_poster_file, '-pix_fmt rgb24'), (config.audio_in, None)])
-    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + video_filter + '-c:v ' + config.codec + ' -pix_fmt yuv420p ' + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_filter + audio_params + ' -shortest -movflags faststart')])
+    inputs = OrderedDict([(config.png_poster_file, '-pix_fmt ' + pix_fmt_in), (config.audio_in, None)])
+    outputs = OrderedDict([(config.mkv_file, vaapi_device + filter_complex + video_filter + '-c:v ' + config.codec + ' -pix_fmt ' + pix_fmt_out + preset + '-bf 2 -flags +cgop' + tune_stillimage + audio_filter + audio_params + ' -shortest -movflags faststart')])
     ff = ffmpy.FFmpeg(global_options=global_options, inputs=inputs, outputs=outputs)
     print(ff.cmd)
     ff.run()
